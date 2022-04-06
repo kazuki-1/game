@@ -139,7 +139,7 @@ void BGM::UI()
 
 /*-------------------------------------------------------------BGM GetComponentType()------------------------------------------------------*/
 
-COMPONENT_TYPE BGM::GetComponentType()
-{
-    return data->type;
-}
+//COMPONENT_TYPE BGM::GetComponentType()
+//{
+//    return data->type;
+//}

@@ -17,7 +17,7 @@ HRESULT SCENEGAME::Initialize()
 {
     HRESULT hr{ S_OK };
     // Data loading
-    DATAMANAGER::Instance()->Load("test.stg");
+    DATAMANAGER::Instance()->Load("audio_test_.stg");
 
     //AUDIOENGINE::Instance()->Insert("Idle", L"./Data/Audio/Idle.wav");
     //AUDIOENGINE::Instance()->Insert("Tension", L"./Data/Audio/Tension.wav");

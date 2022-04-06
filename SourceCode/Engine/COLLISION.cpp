@@ -208,7 +208,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 /// <param name="m"> : Target model</param>
 /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
+bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
 {
 
     XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
@@ -221,8 +221,24 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
     // 現在のキーフレームを抽出
     bool hit{};
     MODEL_RESOURCES::ANIMATION::KEYFRAME& kf = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame());
+    int cur_index{};
     for (auto& ms : m->Resource()->Meshes)
     {
+        bool onTarget{};
+        if (mesh_index != -1)
+        {
+            if (mesh_index != cur_index)
+            {
+                ++cur_index;
+                continue;
+            }
+            else
+                onTarget = true;
+        }
+
+        if (!onTarget && mesh_index != -1)
+            continue;
+
         // Retrieve the current mesh node and transform matrix to Local Transformation
         // げんざいMESHNODEを抽出し、ローカル変換行列に変換
         MODEL_RESOURCES::ANIMATION::KEYFRAME::NODE& n = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame()).Nodes.at(ms.n_Index);
@@ -922,6 +938,23 @@ bool RAYCAST_MANAGER::Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_me
     }
     return output;
 }
+
+/*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
+
+bool RAYCAST_MANAGER::Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
+{
+    bool output{};
+    for (auto& m : meshes)
+    {
+        if (m != target_mesh)
+            continue;
+        output = RayCast(startofRay, endOfRay, m->Model().get(), rcd);
+        if (output)
+            break;
+    }
+    return output;
+}
+
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 

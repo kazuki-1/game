@@ -299,6 +299,7 @@ namespace COLLIDERS
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
         bool Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd);
+        bool Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
         /// <summary>
         /// <para> Performs ray cast on all models in the vector and returns a list of collided model and collision data </para>
         /// <para> モデルリストのすべてのモデルをレイーキャスト当たり判定を計算し、あたったモデルのリストを返す </para>
@@ -357,6 +358,6 @@ namespace COLLIDERS
     /// <param name="m"> : Target model</param>
     /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
     /// <returns></returns>
-    bool RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr);
+    bool RayCast(VECTOR3& s, VECTOR3& e, MODEL* m,  RAYCASTDATA& hr, int mesh_index = -1);
     
 }

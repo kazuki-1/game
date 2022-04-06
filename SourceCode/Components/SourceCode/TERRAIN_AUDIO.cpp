@@ -140,7 +140,7 @@ void TERRAIN_AUDIO::UI()
 
                 TERRAIN_AUDIO_DATA_EMITTER* current = static_cast<TERRAIN_AUDIO_DATA_EMITTER*>(data->property_data.get());
                 ImGui::InputText("Terrain name", current->name, 256);
-                ImGui::Text(std::to_string(current->material_index).c_str());
+                ImGui::Text(std::to_string(current->mesh_index).c_str());
                 ImGui::InputText("Audio Name", current->audio_data->name, 256);
                 IMGUI::Instance()->InputText("Audio File", &current->audio_data->file_path);
 
@@ -158,7 +158,7 @@ void TERRAIN_AUDIO::UI()
                 ImGui::ListBoxFooter();
                 if (ImGui::Button("Set Parameters"))
                 {
-                    current->material_index = (int)mr->Materials.find(sel)->first;
+                    current->mesh_index = sel;
                     std::wstring dir{ L"./Data/Audio/" };
                     std::filesystem::path filename(current->audio_data->file_path);
                     dir += filename.filename().wstring();

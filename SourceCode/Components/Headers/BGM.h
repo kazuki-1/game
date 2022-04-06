@@ -28,7 +28,7 @@ public:
     void Execute() override;
     void Render() override;
     void UI() override;
-    COMPONENT_TYPE GetComponentType() override;
+    //COMPONENT_TYPE GetComponentType() override;
 };
 
 CEREAL_REGISTER_TYPE(BGM_DATA)

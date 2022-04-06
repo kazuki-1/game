@@ -331,7 +331,7 @@ void PLAYER_CONTROLLER::TerrainAudioCollision()
             VECTOR3 end{ start };
             end.y -= 0.02f;
             COLLIDERS::RAYCASTDATA rcd{};
-            bool collided{ RAYCAST(start, end, mesh, rcd) };
+            bool collided{ RAYCAST(start, end, emitter_mesh, ((TERRAIN_AUDIO_DATA_EMITTER*)emitter->Data())->mesh_index, rcd) };
             bool triggered{};
             if (collided && statuses[ind] != collided)
                 triggered = true;
