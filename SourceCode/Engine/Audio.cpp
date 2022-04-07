@@ -36,8 +36,7 @@ HRESULT AUDIOENGINE::Initialize()
 
     hr = xAudio->CreateMasteringVoice(&masteringVoice, XAUDIO2_DEFAULT_CHANNELS, 48000);
     assert(hr == S_OK);
-
-
+    Insert("Empty", L"./Data/Audio/empty_sound.wav");
     return S_OK;
     
 
@@ -97,7 +96,12 @@ ComPtr<IXAudio2>AUDIOENGINE::XAudio()
 
 std::shared_ptr<AUDIO>AUDIOENGINE::Retrieve(std::string name)
 {
-    return audios.find(name)->second;
+    for (auto& a : audios)
+    {
+        if (name == a.first)
+            return a.second;
+    }
+    return audios.find("Empty")->second;
 }
 
 /*---------------------------------------------AUDIOENGINE Audios()----------------------------------------------------*/
