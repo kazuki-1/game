@@ -43,6 +43,17 @@ HRESULT AUDIOENGINE::Initialize()
 
 }
 
+/*---------------------------------------------AUDIOENGINE Execute()----------------------------------------------------*/
+/// <summary>
+/// <para> Called every frame to perform functions </para>
+/// <para> š°¥Õ¥ì©`¥à¤Ëºô¤Ó³ö¤¹ </para>
+/// </summary>
+void AUDIOENGINE::Execute()
+{
+    for (auto& a : audios)
+        a.second->Execute();
+}
+
 /*---------------------------------------------AUDIOENGINE Finalize()----------------------------------------------------*/
 /// <summary>
 /// Finalizes the class, generally not needed
@@ -190,9 +201,10 @@ void AUDIO::Play()
         return;
     HRESULT hr = sourceVoice->SubmitSourceBuffer(&buffer);
     assert(hr == S_OK);
-    sourceVoice->Start();
-    sourceVoice->SetVolume(volume);
     isPlaying = true;
+    //sourceVoice->Start();
+    //sourceVoice->SetVolume(volume);
+    //stateMachine->FadeTo(1.0f, 1.0f);
 
 }
 
@@ -203,6 +215,8 @@ void AUDIO::FadeInAndPlay(float fade_time)
     Play();
     FadeIn(fade_time);
 }
+
+/*---------------------------------------------AUDIO FadeOutAndPause()----------------------------------------------------*/
 
 void AUDIO::FadeOutAndPause(float fade_time)
 {
@@ -217,7 +231,9 @@ void AUDIO::Stop()
 {
     if (!isPlaying)
         return;
-    sourceVoice->Stop();
+    stateMachine->FadeTo(1.0f, 0.0f);
+
+    //sourceVoice->Stop();
     //sourceVoice->DestroyVoice();
     isPlaying = false;
 }
@@ -249,50 +265,36 @@ void AUDIO::LoopInRange(UINT begin, UINT end)
 
 void AUDIO::FadeIn(float fade_time)
 {
-   
-    if (volume >= 1.0f)
-        return;
-    float rate = { 1.0f / 60.0f / fade_time };
-    
-    volume += rate;
-    volume = min(volume, 1.0f);
-    sourceVoice->SetVolume(volume);
+    FadeTo(1.0f, fade_time);
 }
 
 /*---------------------------------------------AUDIO FadeOut()----------------------------------------------------*/
 
 void AUDIO::FadeOut(float fade_time)
 {
-    if (volume <= 0.0f)
-        return;
-    float rate = { 1.0f / 60.0f / fade_time };
-    volume -= rate;
-    volume = max(volume, 0.0f);
-    sourceVoice->SetVolume(volume);
-    if (volume <= 0.0f)
-        Stop();
-
+    FadeTo(0.0f, fade_time);
 }
 
 /*---------------------------------------------AUDIO DisableLoop()----------------------------------------------------*/
 
 void AUDIO::FadeTo(float fade_vol, float fade_time)
 {
+    stateMachine->FadeTo(fade_time, fade_vol);
     // Check if audio is playing
-    if (!isPlaying || volume == fade_vol)
-        return;
+    //if (!isPlaying || volume == fade_vol)
+    //    return;
 
-    // Calculate increment rate
-    float increment = { 1.0f / 60.0f / fade_time };
-    
-    
-    if (fabsf(volume - fade_vol) <= 0.01f)
-    {
-        volume = fade_vol;
-        return;
-    }   
-    volume <= fade_vol ? volume += increment : volume -= increment;
-    
+    //// Calculate increment rate
+    //float increment = { 1.0f / 60.0f / fade_time };
+    //
+    //
+    //if (fabsf(volume - fade_vol) <= 0.01f)
+    //{
+    //    volume = fade_vol;
+    //    return;
+    //}   
+    //volume <= fade_vol ? volume += increment : volume -= increment;
+    //
 }
 
 
@@ -308,6 +310,7 @@ void AUDIO::DisableLoop()
 void AUDIO::SetVolume(float vol)
 {
     volume = vol;
+    sourceVoice->SetVolume(volume);
 }
 
 /*---------------------------------------------AUDIO SetBuffer()----------------------------------------------------*/
@@ -336,6 +339,16 @@ void AUDIO::PerformDucking(float fade_vol)
 void AUDIO::StopDucking()
 {
     isDucking = false;
+}
+
+/*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
+/// <summary>
+/// <para> Sets the fade in volume for the stateMachine </para>
+/// <para> ¥Õ¥§©`¥É¥Ü¥ê¥å©`¥à¤òÔO¶¨¤¹¤ë</para>
+/// </summary>
+void AUDIO::SetFadeInVolume(float fade_in)
+{
+    fade_in_volume = fade_in;
 }
 
 /*---------------------------------------------AUDIO Initialize()----------------------------------------------------*/
@@ -370,7 +383,19 @@ HRESULT AUDIO::Initialize()
     this->buffer = buf;
     //delete[] buffer;
     //return buf;
+    stateMachine = std::make_shared<AUDIO_STATES::AudioStateMachine>(this);
+    stateMachine->Initialize();
     return hr;
+}
+
+/*---------------------------------------------AUDIO Execute()----------------------------------------------------*/
+/// <summary>
+/// <para> Called every frame to perform functions </para>
+/// <para> š°¥Õ¥ì©`¥à¤Ëºô¤Ó³ö¤¹ </para>
+/// </summary>
+void AUDIO::Execute()
+{
+    stateMachine->Execute();
 }
 
 /*---------------------------------------------AUDIO Volume()----------------------------------------------------*/
@@ -379,7 +404,6 @@ float AUDIO::Volume()
 {
     return volume;
 }
-
 
 /*---------------------------------------------AUDIO Buffer()----------------------------------------------------*/
 

@@ -6,6 +6,7 @@
 #include <memory>
 #include <map>
 #include "Singleton.h"
+#include "AudioStates/AudioStates.h"
 
 using namespace Microsoft::WRL;
 class AUDIO;
@@ -28,6 +29,11 @@ public:
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
+    /// <para> Called every frame to perform functions </para>
+    /// <para> 毎フレームに呼び出す </para>
+    /// </summary>
+    void Execute();
+    /// <summary>
     /// <para> Create an AUDIO object and insert it into the map </para>
     /// <para> AUDIO傪惗惉偟丄儅僢僾偵搊榐</para>
     /// </summary>
@@ -48,15 +54,18 @@ public:
 class AUDIO
 {
     std::wstring file_path;
-    bool isPlaying{};
     bool isDucking{};
+    bool isPlaying{};
     IXAudio2SourceVoice* sourceVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
 public:
+    std::shared_ptr<AUDIO_STATES::AudioStateMachine>stateMachine;
+
     float volume{ 1.0f };
+    float fade_in_volume{};
     AUDIO(std::wstring path);
     void Play();
     /// <summary>
@@ -95,7 +104,7 @@ public:
     /// </summary>
     /// <param name = "fade_vol"> : Volume to be faded to </param>
     /// <param name="fade_time"> : Time taken for effect to finish</param>
-    void FadeTo(float fade_vol, float fade_time);
+    void FadeTo(float fade_vol, float fade_time = 1.0f);
     void DisableLoop();
     void SetVolume(float vol);
     /// <summary>
@@ -114,15 +123,49 @@ public:
     /// <para> ダッキングを中止する</para>
     /// </summary>
     void StopDucking();
+    /// <summary>
+    /// <para> Sets the fade in volume for the stateMachine </para>
+    /// <para> フェードボリュームを設定する</para>
+    /// </summary>
+    void SetFadeInVolume(float fade_in_vol);
     std::wstring FilePath();
-
+    /// <summary>
+    /// <para> Called to initialize the object </para>
+    /// <para> オブジェクトを初期化する </para>
+    /// </summary>
+    /// <returns></returns>
     HRESULT Initialize();
+    /// <summary>
+    /// <para> Called every frame to perform functions </para>
+    /// <para> 毎フレームに呼び出す </para>
+    /// </summary>
+    void Execute();
     float Volume();
     XAUDIO2_BUFFER Buffer();
     IXAudio2SourceVoice* SourceVoice();
     bool IsPlaying();
     bool IsDucking();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #ifdef _XBOX //Big-Endian

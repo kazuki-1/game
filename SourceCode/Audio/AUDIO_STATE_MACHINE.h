@@ -69,7 +69,7 @@ public:
     /// </summary>
     void Pause();
     /// <summary>
-    /// <Para> Call in Execute() to perform fadeOut and resume</para> 
+    /// <para> Call in Execute() to perform fadeOut and resume</para> 
     /// <para> Execute()に呼び出したらフェードアウトしてオーディオをResumeする </para>
     /// </summary>
     void Resume();

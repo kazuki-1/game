@@ -45,6 +45,9 @@
     <Filter Include="SourceCode\Audio">
       <UniqueIdentifier>{d98636bf-9561-434e-abf3-76658aac4108}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{44083bb2-1efa-47e3-8f23-06d80df59e3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Engine\BlendMode.cpp">
@@ -69,9 +72,6 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\LIGHTING.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Audio.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\DirectX11.cpp">
@@ -200,18 +200,6 @@
     <ClCompile Include="SourceCode\Audio\AUDIO_STATE_MACHINE.cpp">
       <Filter>SourceCode\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Audio\AUDIOSTATE_CLIMAX.cpp">
-      <Filter>SourceCode\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Audio\AUDIOSTATE_COOLDOWN.cpp">
-      <Filter>SourceCode\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Audio\AUDIOSTATE_IDLE.cpp">
-      <Filter>SourceCode\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Audio\AUDIOSTATE_TENSION.cpp">
-      <Filter>SourceCode\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Components\SourceCode\MESH_COLLIDER.cpp">
       <Filter>Components\SourceCode</Filter>
     </ClCompile>
@@ -220,6 +208,21 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Components\SourceCode\TERRAIN_AUDIO.cpp">
       <Filter>Components\SourceCode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Audio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStates.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +263,6 @@
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\CerealHeaders.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Audio.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\DirectX11.h">
@@ -403,22 +403,7 @@
     <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
       <Filter>SourceCode\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIOSTATE_BASE.h">
-      <Filter>SourceCode\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Audio\AUDIO_STATE_MACHINE.h">
-      <Filter>SourceCode\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIOSTATE_IDLE.h">
-      <Filter>SourceCode\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIOSTATE_CLIMAX.h">
-      <Filter>SourceCode\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIOSTATE_COOLDOWN.h">
-      <Filter>SourceCode\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIOSTATE_TENSION.h">
       <Filter>SourceCode\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\Headers\MESH_COLLIDER.h">
@@ -429,6 +414,21 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Components\Headers\TERRAIN_AUDIO.h">
       <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Audio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

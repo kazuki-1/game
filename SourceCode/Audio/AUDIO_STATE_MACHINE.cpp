@@ -1,5 +1,5 @@
 #include "AUDIO_STATE_MACHINE.h"
-#include "AUDIOSTATE_BASE.h"
+//#include "AUDIOSTATE_BASE.h"
 #include "../Engine/Audio.h"
 #include "../Engine/IMGUI.h"
 #define AUDIOS AUDIOENGINE::Instance()->Audios()
@@ -37,7 +37,7 @@ HRESULT AUDIO_STATE_MACHINE::Initialize()
 void AUDIO_STATE_MACHINE::Enter()
 {
     cur_BGM->Stop();
-    cur_BGM->Play();
+    //cur_BGM->Play();
 }
 
 /*---------------------------------------------------AUDIO STATE MACHINE Execute()------------------------------------------------*/
@@ -47,6 +47,7 @@ void AUDIO_STATE_MACHINE::Enter()
 /// </summary>
 void AUDIO_STATE_MACHINE::Execute()
 {
+    AUDIOENGINE::Instance()->Execute();
     if (isDucking)
     {
         for (auto& audio : AUDIOS)
@@ -65,8 +66,8 @@ void AUDIO_STATE_MACHINE::Execute()
 
     if (pause)
         return;
-    if (!transitioning && cur_BGM->Volume() <= 1.0f)
-        cur_BGM->FadeIn(2.0f);
+    //if (!transitioning && cur_BGM->Volume() <= 1.0f)
+    //    cur_BGM->FadeIn(2.0f);
 
     if (transitioning && !isDucking)
     {
@@ -158,14 +159,14 @@ void AUDIO_STATE_MACHINE::Transition(AudioStates next_state)
 
 /*---------------------------------------------------AUDIO STATE MACHINE Pause()------------------------------------------------*/
 /// <summary>
-/// <Para> Call in Execute() to perform fadeOut and pause </para> 
+/// <para> Call in Execute() to perform fadeOut and pause </para> 
 /// <para> Execute()Ç…åƒÇ—èoÇµÇΩÇÁÉtÉFÅ[ÉhÉAÉEÉgÇµÇƒÉIÅ[ÉfÉBÉIÇPauseÇ∑ÇÈ </para>
 /// </summary>
 void AUDIO_STATE_MACHINE::Pause()
 {
-    if (transitioning)
+    if (transitioning || pause)
         return;
-    cur_BGM->FadeOutAndPause(TRANSITION_TIME);
+    cur_BGM->Stop();
     pause = true;
 }
 
@@ -176,16 +177,16 @@ void AUDIO_STATE_MACHINE::Pause()
 /// </summary>
 void AUDIO_STATE_MACHINE::Resume()
 {
-    if (transitioning)
+    if (transitioning || !pause)
         return;
+    cur_BGM->FadeTo(1.0f, 1.0f);
     cur_BGM->Play();
-    cur_BGM->FadeIn(TRANSITION_TIME);
     pause = false;
 }
 
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
-/// <para> Performs audio douking. dock_target variable will be exempt </para>
+/// <para> Performs audio ducking. dock_target variable will be exempt </para>
 /// <para> •™©`•«•£•™•¿•√•≠•Û•∞§Ú––§¶°£dock_target§œ≥˝Õ‚§µ§Ï§Î</para>
 /// </summary>
 /// <param name="dock_target"></param>
