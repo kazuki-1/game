@@ -12,6 +12,7 @@ using namespace AUDIO_STATES;
 void AudioStatePlay::Initialize(AUDIO* parent)
 {
     parent->Play();
+
     //float volume{ parent->Volume() };
     //float dist{ 1.0f - volume };
     //increment = dist / (fade_time * 60.0f);

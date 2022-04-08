@@ -15,6 +15,7 @@ class AUDIO;
 /// </summary>
 class AUDIOENGINE : public SINGLETON<AUDIOENGINE>
 {
+    
     ComPtr<IXAudio2>xAudio;
     IXAudio2MasteringVoice* masteringVoice;
     //IXAudio2SourceVoice* SourceVoice;
@@ -53,12 +54,17 @@ public:
 
 class AUDIO
 {
-    std::wstring file_path;
-    bool isDucking{};
-    bool isPlaying{};
+protected:
     IXAudio2SourceVoice* sourceVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
+
+
+    std::wstring file_path;
+    bool isDucking{};
+    bool isPlaying{};
+
+
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
 public:
@@ -66,8 +72,9 @@ public:
 
     float volume{ 1.0f };
     float fade_in_volume{};
+    AUDIO() {};
     AUDIO(std::wstring path);
-    void Play();
+    virtual void Play();
     /// <summary>
     /// <para> Call this to perform fade in and play the file </para>
     /// </summary>

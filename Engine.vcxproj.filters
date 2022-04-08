@@ -430,6 +430,9 @@
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\SoundEffect.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Shader_2d.fx">

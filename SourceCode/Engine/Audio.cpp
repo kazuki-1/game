@@ -201,6 +201,8 @@ void AUDIO::Play()
         return;
     HRESULT hr = sourceVoice->SubmitSourceBuffer(&buffer);
     assert(hr == S_OK);
+    sourceVoice->Start();
+    stateMachine->Transition(AUDIO_STATES::AudioStateEnum::AudioStatePlay);
     isPlaying = true;
     //sourceVoice->Start();
     //sourceVoice->SetVolume(volume);

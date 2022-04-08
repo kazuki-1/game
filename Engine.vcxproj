@@ -137,6 +137,7 @@
     <ClInclude Include="SourceCode\Engine\ResourceManager.h" />
     <ClInclude Include="SourceCode\Engine\SHADERS.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
+    <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
     <ClInclude Include="SourceCode\Engine\Texture.h" />

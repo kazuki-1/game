@@ -17,7 +17,7 @@ HRESULT SCENEGAME::Initialize()
 {
     HRESULT hr{ S_OK };
     // Data loading
-    DATAMANAGER::Instance()->Load("bgm_test.stg");
+    DATAMANAGER::Instance()->Load("terrain_2.stg");
 
     //AUDIOENGINE::Instance()->Insert("Idle", L"./Data/Audio/Idle.wav");
     //AUDIOENGINE::Instance()->Insert("Tension", L"./Data/Audio/Tension.wav");

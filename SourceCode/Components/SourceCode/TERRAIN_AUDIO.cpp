@@ -1,6 +1,7 @@
 #include "../Headers/TERRAIN_AUDIO.h"
 #include "../Headers/MESH.h"
 #include "../../Audio/AUDIO_STATE_MACHINE.h"
+#include "../../Engine/SoundEffect.h"
 std::string types[] = { "Emitter", "Receiver" };
 
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -41,7 +42,7 @@ HRESULT TERRAIN_AUDIO::Initialize()
         buffers.resize(32);
         for (auto& b : buffers)
         {
-            b.buffer = std::make_shared<AUDIO>(emitter->audio_data->file_path);
+            b.buffer = std::make_shared<SoundEffect>(emitter->audio_data->file_path);
             b.buffer->Initialize();
             b.buffer->SetBuffer(AUDIOENGINE::Instance()->Retrieve(emitter->audio_data->name)->Buffer());
 

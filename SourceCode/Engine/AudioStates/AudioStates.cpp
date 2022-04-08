@@ -28,6 +28,8 @@ void AudioStateMachine::Initialize()
 /// </summary>
 void AudioStateMachine::Transition(AudioStateEnum next_state)
 {
+    if (enum_state == next_state)
+        return;
     enum_state = next_state;
     if (current_state)
         current_state->Finalize(parent);
