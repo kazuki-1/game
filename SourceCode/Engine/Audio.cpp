@@ -209,23 +209,6 @@ void AUDIO::Play()
 
 }
 
-/*---------------------------------------------AUDIO FadeInAndPlay()----------------------------------------------------*/
-
-void AUDIO::FadeInAndPlay(float fade_time)
-{
-    Play();
-    FadeIn(fade_time);
-}
-
-/*---------------------------------------------AUDIO FadeOutAndPause()----------------------------------------------------*/
-
-void AUDIO::FadeOutAndPause(float fade_time)
-{
-    FadeOut(1.0f);
-    if (volume <= 0.0f)
-        Stop();
-}
-
 /*---------------------------------------------AUDIO Stop()----------------------------------------------------*/
 
 void AUDIO::Stop()

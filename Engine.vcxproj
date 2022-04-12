@@ -77,8 +77,8 @@
     <ClCompile Include="SourceCode\GAMEOBJECT.cpp" />
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp" />
     <ClCompile Include="SourceCode\OBJECT_DATA.cpp" />
-    <ClCompile Include="SourceCode\SCENEGAME.cpp" />
-    <ClCompile Include="SourceCode\SCENEMANAGER.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENEGAME.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\ImGui\imconfig.h" />
@@ -149,9 +149,9 @@
     <ClInclude Include="SourceCode\GAMEOBJECT.h" />
     <ClInclude Include="SourceCode\GAMEOBJECT_2D.h" />
     <ClInclude Include="SourceCode\OBJECT_DATA.h" />
-    <ClInclude Include="SourceCode\SCENE.h" />
-    <ClInclude Include="SourceCode\SCENEGAME.h" />
-    <ClInclude Include="SourceCode\SCENEMANAGER.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENE.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENEGAME.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENEMANAGER.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Shader_2d.fx">

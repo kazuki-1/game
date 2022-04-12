@@ -48,6 +48,9 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{44083bb2-1efa-47e3-8f23-06d80df59e3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SourceCode\Source Files\Scene">
+      <UniqueIdentifier>{ef846986-92b5-44e8-b1de-aba85884fdda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Engine\BlendMode.cpp">
@@ -63,9 +66,6 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Graphics.cpp">
-      <Filter>SourceCode\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\SCENEGAME.cpp">
       <Filter>SourceCode\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
@@ -124,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\SHADERS.cpp">
       <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\SCENEMANAGER.cpp">
-      <Filter>SourceCode\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\DEBUG_PRIMITIVE.cpp">
       <Filter>Engine\Source Files</Filter>
@@ -230,6 +227,12 @@
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Scenes\SCENEGAME.cpp">
+      <Filter>SourceCode\Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp">
+      <Filter>SourceCode\Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Engine\BlendMode.h">
@@ -255,15 +258,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Texture.h">
       <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SCENEGAME.h">
-      <Filter>SourceCode\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SCENEMANAGER.h">
-      <Filter>SourceCode\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SCENE.h">
-      <Filter>SourceCode\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\LIGHTING.h">
       <Filter>Engine\Header Files</Filter>
@@ -444,6 +438,15 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scenes\SCENEGAME.h">
+      <Filter>SourceCode\Source Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scenes\SCENEMANAGER.h">
+      <Filter>SourceCode\Source Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scenes\SCENE.h">
+      <Filter>SourceCode\Source Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

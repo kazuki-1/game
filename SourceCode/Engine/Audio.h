@@ -75,12 +75,6 @@ public:
     AUDIO() {};
     AUDIO(std::wstring path);
     virtual void Play();
-    /// <summary>
-    /// <para> Call this to perform fade in and play the file </para>
-    /// </summary>
-    /// <param name="fade_time"></param>
-    void FadeInAndPlay(float fade_time);
-    void FadeOutAndPause(float fade_time);
     void Stop();
     void Finalize();
     /// <summary>

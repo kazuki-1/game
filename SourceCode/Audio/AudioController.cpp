@@ -23,6 +23,7 @@ int index{};
 /// <returns></returns>
 HRESULT AudioController::Initialize()
 {
+    audioMap.clear();
     audioMap.insert(std::make_pair(AudioStates::State_Idle, AUDIOENGINE::Instance()->Retrieve("Idle")));
     audioMap.insert(std::make_pair(AudioStates::State_Tension, AUDIOENGINE::Instance()->Retrieve("Tension")));
     audioMap.insert(std::make_pair(AudioStates::State_Climax, AUDIOENGINE::Instance()->Retrieve("Climax")));
@@ -36,7 +37,7 @@ HRESULT AudioController::Initialize()
 
 void AudioController::Enter()
 {
-    cur_BGM->Stop();
+    cur_BGM->FadeIn(1.0f);
     //cur_BGM->Play();
 }
 
@@ -124,6 +125,10 @@ void AudioController::DebugUI()
         }
         ImGui::Checkbox("Play", &play);
         ImGui::Checkbox("Perform Ducking", &duck);
+        if (ImGui::Button("Stop"))
+        {
+            cur_BGM->Stop();
+        }
         if (duck)
             PerformDucking();
         else
@@ -153,7 +158,11 @@ void AudioController::DebugUI()
 /// </summary>
 void AudioController::Finalize()
 {
-    audioMap.clear();
+    for (auto& a : audioMap)
+    {
+        if (a.second->Volume() > 0.01f)
+            a.second->FadeOut(1.0f);
+    }
 }
 
 

@@ -1,13 +1,13 @@
-#include "Engine/Camera.h"
-#include "Engine/IMGUI.h"
-#include "Engine/ResourceManager.h"
-#include "Engine/LIGHTING.h"
-#include "Engine/Input.h"
 #include "SCENEGAME.h"
-#include "Components/Base Classes/DATAMANAGER.h"
-#include "GAMEOBJECT.h"
-#include "Engine/Audio.h"
-#include "Audio/AudioController.h"
+#include "../Engine/Camera.h"
+#include "../Engine/IMGUI.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/LIGHTING.h"
+#include "../Engine/Input.h"
+#include "../Components/Base Classes/DATAMANAGER.h"
+#include "../GAMEOBJECT.h"
+#include "../Engine/Audio.h"
+#include "../Audio/AudioController.h"
 std::shared_ptr<AUDIO>test_audio;
 
 
@@ -17,7 +17,7 @@ HRESULT SCENEGAME::Initialize()
 {
     HRESULT hr{ S_OK };
     // Data loading
-    DATAMANAGER::Instance()->Load("terrain_2.stg");
+    DATAMANAGER::Instance()->Load("bgm_test.stg");
     AudioController::Instance()->Initialize();
     return hr;
 }

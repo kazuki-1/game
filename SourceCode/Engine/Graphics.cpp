@@ -6,8 +6,7 @@
 #include "Camera.h"
 #include "BlendMode.h"
 #include "MODEL.h"
-#include "../SCENEMANAGER.h"
-#include "../SCENEGAME.h"
+#include "../Scenes/SCENEMANAGER.h"
 #include "../Components/Base Classes/COMPONENT_CREATOR.h"
 #include "Audio.h"
 #include "IMGUI.h"
@@ -36,12 +35,13 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     SHADERMANAGER::Instance()->Initialize();
     AUDIOENGINE::Instance()->Initialize();
-
     BLENDMODE::Instance()->Create(BLENDMODE::BLEND_MODE::ALPHA, DirectX11::Instance()->Device());
     COMPONENT_CREATOR::Instance()->Initialize();
     SCENEMANAGER::Instance()->Initialize();
     Camera::Instance()->Initialize({ 0, 0, 1 }, {});
     Camera::Instance()->SetRange(10);
+
+
     return S_OK;
 }
 
