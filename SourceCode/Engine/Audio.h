@@ -31,7 +31,7 @@ public:
     HRESULT Initialize();
     /// <summary>
     /// <para> Called every frame to perform functions </para>
-    /// <para> 毎フレームに呼び出す </para>
+    /// <para> 毎フE`ムに呼び出す </para>
     /// </summary>
     void Execute();
     /// <summary>
@@ -107,7 +107,7 @@ public:
     void FadeOut(float fade_time);
     /// <summary>
     /// <para> Perform a fade effect to the target volume. CALL BEFORE Play() </para>
-    /// <para> 指定されたボリュームまでフェードエフェクトを掛ける </para>
+    /// <para> 指定さE骏堀丒濠`ムまでフェードエフェクトを拋E堡丒</para>
     /// </summary>
     /// <param name = "fade_vol"> : Volume to be faded to </param>
     /// <param name="fade_time"> : Time taken for effect to finish</param>
@@ -122,29 +122,29 @@ public:
     void SetBuffer(XAUDIO2_BUFFER buffer);
     /// <summary>
     /// <para> Performs ducking and fades the volume to 0.3f</para>
-    /// <para>ダッキングを行い、音量を０．３に調整する </para>
+    /// <para>ダッキングを行い、音量を０．３に調整すE</para>
     /// </summary>
     void PerformDucking(float fade_vol);
     /// <summary>
     /// <para> stops the ducking state</para>
-    /// <para> ダッキングを中止する</para>
+    /// <para> ダッキングを中止すE/para>
     /// </summary>
     void StopDucking();
     /// <summary>
     /// <para> Sets the fade in volume for the stateMachine </para>
-    /// <para> フェードボリュームを設定する</para>
+    /// <para> フェードボE濠`ムを設定すE/para>
     /// </summary>
     void SetFadeInVolume(float fade_in_vol);
     std::wstring FilePath();
     /// <summary>
     /// <para> Called to initialize the object </para>
-    /// <para> オブジェクトを初期化する </para>
+    /// <para> オブジェクトを初期化すE</para>
     /// </summary>
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
     /// <para> Called every frame to perform functions </para>
-    /// <para> 毎フレームに呼び出す </para>
+    /// <para> 毎フE`ムに呼び出す </para>
     /// </summary>
     void Execute();
     float Volume();
@@ -153,25 +153,6 @@ public:
     bool IsPlaying();
     bool IsDucking();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -25,12 +25,12 @@ namespace AUDIO_STATES
         virtual void Initialize(AUDIO* parent) {};
         /// <summary>
         /// <para> Called every frame to perform any functions </para>
-        /// <para> ö∞•’•Ï©`•‡§À∫Ù§”≥ˆ§π </para>
+        /// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
         /// </summary>
         virtual void Execute(AUDIO* parent) {};
         /// <summary>
         /// <para>Called when transitioning away from this state </para>
-        /// <para> •π•∆©`•»ﬂw“∆§ŒÎH§À∫Ù§”≥ˆ§π </para>
+        /// <para> •π•∆©`•»ﬂw“∆§ŒÅE§À∫Ù§”≥ˆ§π </para>
         /// </summary>
         virtual void Finalize(AUDIO* parent) {};
     };
@@ -51,17 +51,17 @@ namespace AUDIO_STATES
         void Initialize();
         /// <summary>
         /// <para> Called to transition to a different state </para>
-        /// <para> •π•∆©`•»§Úﬂw“∆§π§Î°°</para>
+        /// <para> •π•∆©`•»§Úﬂw“∆§π§ÅE°</para>
         /// </summary>
         void Transition(AudioStateEnum next_state);
         /// <summary>
         /// <para> Called every frame to perform any functions </para>
-        /// <para> ö∞•’•Ï©`•‡§À∫Ù§”≥ˆ§π </para>
+        /// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
         /// </summary>
         void Execute();
         /// <summary>
         /// <para> Perform fade to the specified volume in the specified time</para>
-        /// <para> ÷∏∂®§µ§Ï§ø“Ù¡ø§Ú÷∏∂®§µ§Ï§øïrÈg§À•’•ß©`•… </para>
+        /// <para> ÷∏∂®§µ§ÅEø“Ù¡ø§Ú÷∏∂®§µ§ÅEøïrÈg§À•’•ß©`•… </para>
         /// </summary>
         /// <param name="fade_time"> : Fade will be done in this. Unit is second</param>
         /// <param name="fade_vol"> : Fade volume target</param>
@@ -72,6 +72,7 @@ namespace AUDIO_STATES
         /// </summary>
         /// <returns></returns>
         AudioStateEnum CurrentState();
+        void DebugUI();
     };
 
 

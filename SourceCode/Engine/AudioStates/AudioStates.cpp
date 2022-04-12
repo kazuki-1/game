@@ -1,3 +1,4 @@
+#include "../../Engine/IMGUI.h"
 #include "AudioStates.h"
 #include "AudioStatePlay.h"
 #include "AudioStateFade.h"
@@ -24,7 +25,7 @@ void AudioStateMachine::Initialize()
 /*----------------------------------------AudioStateMachine Transition()---------------------------------------------*/
 /// <summary>
 /// <para> Called to transition to a different state </para>
-/// <para> •π•∆©`•»§Úﬂw“∆§π§Î°°</para>
+/// <para> •π•∆©`•»§Úﬂw“∆§π§ÅE°</para>
 /// </summary>
 void AudioStateMachine::Transition(AudioStateEnum next_state)
 {
@@ -40,7 +41,7 @@ void AudioStateMachine::Transition(AudioStateEnum next_state)
 /*----------------------------------------AudioStateMachine Execute()---------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> ö∞•’•Ï©`•‡§À∫Ù§”≥ˆ§π </para>
+/// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
 /// </summary>
 void AudioStateMachine::Execute()
 {
@@ -51,7 +52,7 @@ void AudioStateMachine::Execute()
 /*----------------------------------------AudioStateMachine FadeTo()---------------------------------------------*/
 /// <summary>
 /// <para> Perform fade to the specified volume in the specified time</para>
-/// <para> ÷∏∂®§µ§Ï§ø“Ù¡ø§Ú÷∏∂®§µ§Ï§øïrÈg§À•’•ß©`•… </para>
+/// <para> ÷∏∂®§µ§ÅEø“Ù¡ø§Ú÷∏∂®§µ§ÅEøïrÈg§À•’•ß©`•… </para>
 /// </summary>
 /// <param name="fade_time"> : Fade will be done in this. Unit is second</param>
 /// <param name="fade_vol"> : Fade volume target</param>
@@ -74,4 +75,22 @@ void AudioStateMachine::FadeTo(float fade_time, float fade_vol)
 AudioStateEnum AudioStateMachine::CurrentState()
 {
     return enum_state;
+}
+
+/*----------------------------------------AudioStateMachine DebugUI()---------------------------------------------*/
+void AudioStateMachine::DebugUI()
+{
+    
+    switch (enum_state)
+    {
+    case AudioStateEnum::AudioStatePlay:
+        ImGui::Text("AudioStatePlay");
+        break;
+    case AudioStateEnum::AudioStatePause:
+        ImGui::Text("AudioStatePause");
+        break;    
+    case AudioStateEnum::AudioStateFade:
+        ImGui::Text("AudioStateFade");
+        break;
+    }
 }

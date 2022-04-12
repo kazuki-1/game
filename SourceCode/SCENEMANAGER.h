@@ -15,7 +15,6 @@ public:
     /// <summary>
     /// Initializes the scene manager by inserting neccessary scenes into the map
     /// </summary>
-    /// <param name="s"></param>
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>

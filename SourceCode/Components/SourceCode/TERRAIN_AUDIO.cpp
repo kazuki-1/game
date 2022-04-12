@@ -1,6 +1,6 @@
 #include "../Headers/TERRAIN_AUDIO.h"
 #include "../Headers/MESH.h"
-#include "../../Audio/AUDIO_STATE_MACHINE.h"
+#include "../../Audio/AudioController.h"
 #include "../../Engine/SoundEffect.h"
 std::string types[] = { "Emitter", "Receiver" };
 
@@ -220,7 +220,7 @@ void TERRAIN_AUDIO::Play()
     TERRAIN_AUDIO_DATA_EMITTER* emitter = dynamic_cast<TERRAIN_AUDIO_DATA_EMITTER*>(data->property_data.get());
     if (!emitter)
         return;
-    bool isDucking{ AUDIO_STATE_MACHINE::Instance()->IsDucking() };
+    bool isDucking{ AudioController::Instance()->IsDucking() };
     for (auto& b : buffers)
     {
         if (isDucking)

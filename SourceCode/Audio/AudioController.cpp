@@ -1,4 +1,4 @@
-#include "AUDIO_STATE_MACHINE.h"
+#include "AudioController.h"
 //#include "AUDIOSTATE_BASE.h"
 #include "../Engine/Audio.h"
 #include "../Engine/IMGUI.h"
@@ -21,7 +21,7 @@ int index{};
 /// <para> 僆乕僨傿僆傪儅僢僾偵搊榐偡傞傛偆偵僋儔僗傪弶婜壔偡傞</para>
 /// </summary>
 /// <returns></returns>
-HRESULT AUDIO_STATE_MACHINE::Initialize()
+HRESULT AudioController::Initialize()
 {
     audioMap.insert(std::make_pair(AudioStates::State_Idle, AUDIOENGINE::Instance()->Retrieve("Idle")));
     audioMap.insert(std::make_pair(AudioStates::State_Tension, AUDIOENGINE::Instance()->Retrieve("Tension")));
@@ -34,7 +34,7 @@ HRESULT AUDIO_STATE_MACHINE::Initialize()
 
 /*---------------------------------------------------AUDIO STATE MACHINE Enter()------------------------------------------------*/
 
-void AUDIO_STATE_MACHINE::Enter()
+void AudioController::Enter()
 {
     cur_BGM->Stop();
     //cur_BGM->Play();
@@ -45,7 +45,7 @@ void AUDIO_STATE_MACHINE::Enter()
 /// <para> Called every frame. Performs fadeIn and fadeOut effects of current and next bgm</para>
 /// <para> 奺Audio偺僼僃乕僪僀儞偲僼僃乕僪傾僂僩僄僼僃僋僩傪張棟偡傞傛偆偵枅僼儗乕儉偵屇傃弌偡</para> 
 /// </summary>
-void AUDIO_STATE_MACHINE::Execute()
+void AudioController::Execute()
 {
     AUDIOENGINE::Instance()->Execute();
     if (isDucking)
@@ -93,7 +93,7 @@ void AUDIO_STATE_MACHINE::Execute()
 
 /*---------------------------------------------------AUDIO STATE MACHINE DebugUI()------------------------------------------------*/
 
-void AUDIO_STATE_MACHINE::DebugUI()
+void AudioController::DebugUI()
 {
     if (ImGui::Begin("Audio Test"))
     {
@@ -130,6 +130,18 @@ void AUDIO_STATE_MACHINE::DebugUI()
             StopDucking();
 
         play ? Resume() : Pause();
+        //int ind{};
+        //for (auto& b : audioMap)
+        //{
+        //    std::string s{ "BGM " };
+        //    s += std::to_string(ind);
+        //    if (ImGui::TreeNode(s.c_str()))
+        //    {
+        //        b.second->stateMachine->DebugUI();
+        //        ImGui::TreePop();
+        //    }
+        //    ++ind;
+        //}
         ImGui::End();
     }
 
@@ -139,7 +151,7 @@ void AUDIO_STATE_MACHINE::DebugUI()
 /// <summary>
 /// Changes the current BGM to the next BGM
 /// </summary>
-void AUDIO_STATE_MACHINE::Exit()
+void AudioController::Exit()
 {
     cur_BGM->Stop();
     cur_BGM = next_BGM;
@@ -151,7 +163,7 @@ void AUDIO_STATE_MACHINE::Exit()
 /// <para> 師偺僆乕僨傿僆偵僩儔儞僕僔儑儞偡傞</para>
 /// </summary>
 /// <param name="next_state"> : State to be transitioned to </param>
-void AUDIO_STATE_MACHINE::Transition(AudioStates next_state)
+void AudioController::Transition(AudioStates next_state)
 {
     next_BGM = audioMap.find(next_state)->second;
     transitioning = true;
@@ -162,7 +174,7 @@ void AUDIO_STATE_MACHINE::Transition(AudioStates next_state)
 /// <para> Call in Execute() to perform fadeOut and pause </para> 
 /// <para> Execute()偵屇傃弌偟偨傜僼僃乕僪傾僂僩偟偰僆乕僨傿僆傪Pause偡傞 </para>
 /// </summary>
-void AUDIO_STATE_MACHINE::Pause()
+void AudioController::Pause()
 {
     if (transitioning || pause)
         return;
@@ -175,7 +187,7 @@ void AUDIO_STATE_MACHINE::Pause()
 /// <Para> Call in Execute() to perform fadeOut and resume</para> 
 /// <para> Execute()偵屇傃弌偟偨傜僼僃乕僪傾僂僩偟偰僆乕僨傿僆傪Resume偡傞 </para>
 /// </summary>
-void AUDIO_STATE_MACHINE::Resume()
+void AudioController::Resume()
 {
     if (transitioning || !pause)
         return;
@@ -187,10 +199,10 @@ void AUDIO_STATE_MACHINE::Resume()
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Performs audio ducking. dock_target variable will be exempt </para>
-/// <para> オーディオダッキングを行う。dock_targetは除外される</para>
+/// <para> オーディオダッキングを行う。dock_targetは除外さE丒/para>
 /// </summary>
 /// <param name="dock_target"></param>
-void AUDIO_STATE_MACHINE::PerformDucking(std::shared_ptr<AUDIO>duck_target)
+void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
 {
     if (isDucking)
         return;
@@ -202,9 +214,9 @@ void AUDIO_STATE_MACHINE::PerformDucking(std::shared_ptr<AUDIO>duck_target)
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Stops audio ducking if is ducking. </para>
-/// <para> ダッキングを止める </para>
+/// <para> ダッキングを止めE</para>
 /// </summary>
-void AUDIO_STATE_MACHINE::StopDucking()
+void AudioController::StopDucking()
 {
     if (!isDucking)
         return;
@@ -215,10 +227,10 @@ void AUDIO_STATE_MACHINE::StopDucking()
 /*---------------------------------------------------AUDIO STATE MACHINE IsDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Returns true if audio is in ducking state </para>
-/// <para> オーディオはダッキングステートであればTrueを返す</para>
+/// <para> オーディオはダッキングステートであE蠺rueを返す</para>
 /// </summary>
 /// <returns></returns>
-bool AUDIO_STATE_MACHINE::IsDucking()
+bool AudioController::IsDucking()
 {
     return isDucking;
 }

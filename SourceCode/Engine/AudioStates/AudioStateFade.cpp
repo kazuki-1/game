@@ -23,7 +23,7 @@ void AudioStateFade::Initialize(AUDIO* parent)
 /*----------------------------------------AudioStateFade Execute()-------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> 毎フレームに呼び出す </para>
+/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AudioStateFade::Execute(AUDIO* parent)
 {
@@ -49,7 +49,7 @@ void AudioStateFade::Execute(AUDIO* parent)
 /*----------------------------------------AudioStateFade Finalize()-------------------------------------------*/
 /// <summary>
 /// <para>Called when transitioning away from this state </para>
-/// <para> ステート遷移の際に呼び出す </para>
+/// <para> ステート遷移の丒に呼び出す </para>
 /// </summary>
 void AudioStateFade::Finalize(AUDIO* parent)
 {
@@ -59,7 +59,7 @@ void AudioStateFade::Finalize(AUDIO* parent)
 /*----------------------------------------AudioStateFade SetVolume()-------------------------------------------*/
 /// <summary>
 /// <para> Sets the volume to be faded to </para>
-/// <para> フェードボリュームを設定する </para>
+/// <para> フェードボE濠`ムを設定すE</para>
 /// </summary>
 void AudioStateFade::SetVolume(float vol)
 {
@@ -69,7 +69,7 @@ void AudioStateFade::SetVolume(float vol)
 /*----------------------------------------AudioStateFade SetTime()-------------------------------------------*/
 /// <summary>
 /// <para> Sets the fade timer</para>
-/// <para> フェードタイムを設定する</para>
+/// <para> フェードタイムを設定すE/para>
 /// </summary>
 void AudioStateFade::SetTime(float t)
 {
@@ -79,7 +79,7 @@ void AudioStateFade::SetTime(float t)
 /*----------------------------------------AudioStateFade CalculateRate()-------------------------------------------*/
 /// <summary>
 /// <para> Calculates the rate of fading. Call after SetVolume and SetTime</para>
-/// <para> フェード速度を計算する。SetVolumeとSetTime呼び出してから呼び出す </para>
+/// <para> フェード速度を計算すEetVolumeとSetTime呼び出してから呼び出す </para>
 /// </summary>
 void AudioStateFade::CalculateRate(AUDIO* parent)
 {

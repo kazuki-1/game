@@ -46,7 +46,7 @@ HRESULT AUDIOENGINE::Initialize()
 /*---------------------------------------------AUDIOENGINE Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
-/// <para> 毎フレームに呼び出す </para>
+/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AUDIOENGINE::Execute()
 {
@@ -325,7 +325,7 @@ void AUDIO::SetBuffer(XAUDIO2_BUFFER buffer)
 /*---------------------------------------------AUDIO PerformDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> Performs ducking and fades the volume to 0.3f</para>
-/// <para>ダッキングを行い、音量を０．３に調整する </para>
+/// <para>ダッキングを行い、音量を０．３に調整すE</para>
 /// </summary>
 void AUDIO::PerformDucking(float fade_vol)
 {
@@ -336,7 +336,7 @@ void AUDIO::PerformDucking(float fade_vol)
 /*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> stops the ducking state</para>
-/// <para> ダッキングを中止する</para>
+/// <para> ダッキングを中止すE/para>
 /// </summary>
 void AUDIO::StopDucking()
 {
@@ -346,7 +346,7 @@ void AUDIO::StopDucking()
 /*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> Sets the fade in volume for the stateMachine </para>
-/// <para> フェードボリュームを設定する</para>
+/// <para> フェードボE濠`ムを設定すE/para>
 /// </summary>
 void AUDIO::SetFadeInVolume(float fade_in)
 {
@@ -393,7 +393,7 @@ HRESULT AUDIO::Initialize()
 /*---------------------------------------------AUDIO Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
-/// <para> 毎フレームに呼び出す </para>
+/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AUDIO::Execute()
 {

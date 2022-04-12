@@ -26,7 +26,7 @@
     <ClCompile Include="External\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="External\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="SourceCode\Audio\AUDIO_STATE_MACHINE.cpp" />
+    <ClCompile Include="SourceCode\Audio\AudioController.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\DATAMANAGER.cpp" />
@@ -88,7 +88,7 @@
     <ClInclude Include="External\ImGui\imstb_rectpack.h" />
     <ClInclude Include="External\ImGui\imstb_textedit.h" />
     <ClInclude Include="External\ImGui\imstb_truetype.h" />
-    <ClInclude Include="SourceCode\Audio\AUDIO_STATE_MACHINE.h" />
+    <ClInclude Include="SourceCode\Audio\AudioController.h" />
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT.h" />
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.h" />
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_DATA.h" />

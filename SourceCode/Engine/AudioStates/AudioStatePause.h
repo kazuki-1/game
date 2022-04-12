@@ -16,12 +16,12 @@ namespace AUDIO_STATES
         void Initialize(AUDIO* parent) override;
         /// <summary>
         /// <para> Called every frame to perform any functions </para>
-        /// <para> 毎フレームに呼び出す </para>
+        /// <para> 毎フE`ムに呼び出す </para>
         /// </summary>
         void Execute(AUDIO* parent) override;
         /// <summary>
         /// <para>Called when transitioning away from this state </para>
-        /// <para> ステート遷移の際に呼び出す </para>
+        /// <para> ステート遷移の丒に呼び出す </para>
         /// </summary>
         void Finalize(AUDIO* parent) override;
     };

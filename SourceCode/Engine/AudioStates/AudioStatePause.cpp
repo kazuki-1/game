@@ -21,7 +21,7 @@ void AudioStatePause::Initialize(AUDIO* parent)
 /*----------------------------------------AudioStatePause Execute()--------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> 毎フレームに呼び出す </para>
+/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AudioStatePause::Execute(AUDIO* parent)
 {
@@ -39,7 +39,7 @@ void AudioStatePause::Execute(AUDIO* parent)
 /*----------------------------------------AudioStatePause Execute()--------------------------------------------*/
 /// <summary>
 /// <para>Called when transitioning away from this state </para>
-/// <para> ステート遷移の際に呼び出す </para>
+/// <para> ステート遷移の丒に呼び出す </para>
 /// </summary>
 void AudioStatePause::Finalize(AUDIO* parent)
 {

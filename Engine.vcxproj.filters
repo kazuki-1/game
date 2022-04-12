@@ -197,7 +197,7 @@
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
       <Filter>SourceCode\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Audio\AUDIO_STATE_MACHINE.cpp">
+    <ClCompile Include="SourceCode\Audio\AudioController.cpp">
       <Filter>SourceCode\Audio</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\SourceCode\MESH_COLLIDER.cpp">
@@ -403,7 +403,7 @@
     <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
       <Filter>SourceCode\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Audio\AUDIO_STATE_MACHINE.h">
+    <ClInclude Include="SourceCode\Audio\AudioController.h">
       <Filter>SourceCode\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\Headers\MESH_COLLIDER.h">
