@@ -21,7 +21,7 @@ void AudioStatePlay::Initialize(AUDIO* parent)
 /*----------------------------------------AudioStatePlay Execute()---------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> 毎フレームに呼び出す </para>
+/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AudioStatePlay::Execute(AUDIO* parent)
 {
@@ -34,7 +34,7 @@ void AudioStatePlay::Execute(AUDIO* parent)
 /*----------------------------------------AudioStatePlay Finalize()---------------------------------------------*/
 /// <summary>
 /// <para>Called when transitioning away from this state </para>
-/// <para> ステート遷移の際に呼び出す </para>
+/// <para> ステート遷移の丒に呼び出す </para>
 /// </summary>
 void AudioStatePlay::Finalize(AUDIO* parent)
 {

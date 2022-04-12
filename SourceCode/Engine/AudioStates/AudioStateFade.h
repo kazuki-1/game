@@ -5,10 +5,10 @@ namespace AUDIO_STATES
 {
     class AudioStateFade : public AudioStateBase
     {
-
-        float fade_volume{ 0.5f };   // fade in will fade to this volume
+    protected:
+        float fade_target{ 0.5f };   // fade in will fade to this volume
         float fade_in_time{ 1.0f };     // Fade in will occur within this time, measured in seconds
-        float fade_in_increment{};      // Volume will increase or decrease by this amount when fading
+        float fade_increment{};      // Volume will increase or decrease by this amount when fading
     public:
         AudioStateFade() {};
         /// <summary>
@@ -16,11 +16,6 @@ namespace AUDIO_STATES
         /// <para> ﾋ訷ﾎ･ｹ･ﾆｩ`･ﾈ､ｫ､鱇wﾒﾆ､ﾎ､ﾈ､ｭ､ﾋｺﾓｳｹ｡｡</para>
         /// </summary>
         void Initialize(AUDIO* parent) override;
-        /// <summary>
-        /// <para> Called every frame to perform any functions </para>
-        /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
-        /// </summary>
-        void Execute(AUDIO* parent) override;
         /// <summary>
         /// <para>Called when transitioning away from this state </para>
         /// <para> ･ｹ･ﾆｩ`･ﾈﾟwﾒﾆ､ﾎ・､ﾋｺﾓｳｹ </para>
@@ -30,7 +25,7 @@ namespace AUDIO_STATES
         /// <para> Sets the volume to be faded to </para>
         /// <para> ･ﾕ･ｧｩ`･ﾉ･ﾜ･・蟀`･爨Oｶｨ､ｹ､・</para>
         /// </summary>
-        void SetVolume(float vol);
+        void SetTargetVolume(float vol);
         /// <summary>
         /// <para> Sets the fade timer</para>
         /// <para> ･ﾕ･ｧｩ`･ﾉ･ｿ･､･爨Oｶｨ､ｹ､・/para>

@@ -8,9 +8,11 @@ namespace AUDIO_STATES
 {
     enum class AudioStateEnum
     {
+        Start =  -1, 
         AudioStatePlay, 
         AudioStatePause, 
-        AudioStateFade, 
+        AudioStateFadeIn,
+        AudioStateFadeOut, 
         End
 
     };
@@ -41,7 +43,7 @@ namespace AUDIO_STATES
         std::map<AudioStateEnum, std::shared_ptr<AudioStateBase>>audioStates;
         std::shared_ptr<AudioStateBase> current_state{};
         AUDIO* parent;
-        AudioStateEnum enum_state;
+        AudioStateEnum state_Enum{AudioStateEnum::Start};
     public:
         AudioStateMachine(AUDIO* p) : parent(p) {};
         /// <summary>
@@ -66,6 +68,11 @@ namespace AUDIO_STATES
         /// <param name="fade_time"> : Fade will be done in this. Unit is second</param>
         /// <param name="fade_vol"> : Fade volume target</param>
         void FadeTo(float fade_time = 1.0f, float fade_vol = 0.5f);
+        /// <summary>
+        /// Perform fade out on the volume within the specified time
+        /// </summary>
+        /// <param name="fade_time"></param>
+        void FadeOut(float fade_time = 1.0f);
         /// <summary>
         /// <para> Returns the current audioStateEnum</para>
         /// <para> ¬FÔÚ¤Î¥¹¥Æ©`¥ÈEnum¤ò·µ¤¹ </para>

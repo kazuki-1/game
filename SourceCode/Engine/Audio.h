@@ -15,7 +15,7 @@ class AUDIO;
 /// </summary>
 class AUDIOENGINE : public SINGLETON<AUDIOENGINE>
 {
-    
+
     ComPtr<IXAudio2>xAudio;
     IXAudio2MasteringVoice* masteringVoice;
     //IXAudio2SourceVoice* SourceVoice;
@@ -49,7 +49,7 @@ public:
     ComPtr<IXAudio2>XAudio();
     std::shared_ptr<AUDIO>Retrieve(std::string name);
     std::map<std::string, std::shared_ptr<AUDIO>>Audios();
-    
+
 };
 
 class AUDIO
@@ -63,7 +63,7 @@ protected:
     std::wstring file_path;
     bool isDucking{};
     bool isPlaying{};
-
+    float volume_before_ducking{};
 
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
@@ -130,11 +130,6 @@ public:
     /// <para> ¥À¥Ã¥­¥ó¥°¤òÖÐÖ¹¤¹¤E/para>
     /// </summary>
     void StopDucking();
-    /// <summary>
-    /// <para> Sets the fade in volume for the stateMachine </para>
-    /// <para> ¥Õ¥§©`¥É¥Ü¥Eå©`¥à¤òÔO¶¨¤¹¤E/para>
-    /// </summary>
-    void SetFadeInVolume(float fade_in_vol);
     std::wstring FilePath();
     /// <summary>
     /// <para> Called to initialize the object </para>

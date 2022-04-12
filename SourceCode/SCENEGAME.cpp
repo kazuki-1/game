@@ -18,11 +18,6 @@ HRESULT SCENEGAME::Initialize()
     HRESULT hr{ S_OK };
     // Data loading
     DATAMANAGER::Instance()->Load("terrain_2.stg");
-
-    //AUDIOENGINE::Instance()->Insert("Idle", L"./Data/Audio/Idle.wav");
-    //AUDIOENGINE::Instance()->Insert("Tension", L"./Data/Audio/Tension.wav");
-    //AUDIOENGINE::Instance()->Insert("Cooldown", L"./Data/Audio/Cooldown.wav");
-    //AUDIOENGINE::Instance()->Insert("Climax", L"./Data/Audio/Climax.wav");
     AudioController::Instance()->Initialize();
     return hr;
 }

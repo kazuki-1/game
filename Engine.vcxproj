@@ -50,6 +50,8 @@
     <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_2D.cpp" />
     <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_3D.cpp" />
     <ClCompile Include="SourceCode\Engine\Audio.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp" />
@@ -114,6 +116,8 @@
     <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_2D.h" />
     <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_3D.h" />
     <ClInclude Include="SourceCode\Engine\Audio.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h" />

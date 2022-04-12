@@ -6,7 +6,6 @@
 #include "Camera.h"
 #include "BlendMode.h"
 #include "MODEL.h"
-#include "../PLAYER.h"
 #include "../SCENEMANAGER.h"
 #include "../SCENEGAME.h"
 #include "../Components/Base Classes/COMPONENT_CREATOR.h"

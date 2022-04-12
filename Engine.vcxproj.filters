@@ -224,6 +224,12 @@
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Engine\BlendMode.h">
@@ -431,6 +437,12 @@
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\SoundEffect.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>

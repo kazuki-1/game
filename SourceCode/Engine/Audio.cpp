@@ -38,7 +38,7 @@ HRESULT AUDIOENGINE::Initialize()
     assert(hr == S_OK);
     Insert("Empty", L"./Data/Audio/empty_sound.wav");
     return S_OK;
-    
+
 
 
 }
@@ -186,7 +186,7 @@ HRESULT AUDIO::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset
 
     if (SetFilePointer(h, offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         assert(!"Error");
-    
+
     DWORD read;
     if (!ReadFile(h, buffer, buffer_Size, &read, 0))
         assert(!"Error");
@@ -202,7 +202,6 @@ void AUDIO::Play()
     HRESULT hr = sourceVoice->SubmitSourceBuffer(&buffer);
     assert(hr == S_OK);
     sourceVoice->Start();
-    stateMachine->Transition(AUDIO_STATES::AudioStateEnum::AudioStatePlay);
     isPlaying = true;
     //sourceVoice->Start();
     //sourceVoice->SetVolume(volume);
@@ -233,7 +232,7 @@ void AUDIO::Stop()
 {
     if (!isPlaying)
         return;
-    stateMachine->FadeTo(1.0f, 0.0f);
+    stateMachine->FadeOut(1.0f);
 
     //sourceVoice->Stop();
     //sourceVoice->DestroyVoice();
@@ -256,7 +255,7 @@ void AUDIO::Loop(UINT loopCount)
 
 /*---------------------------------------------AUDIO Loop()----------------------------------------------------*/
 
-void AUDIO::LoopInRange(UINT begin, UINT end) 
+void AUDIO::LoopInRange(UINT begin, UINT end)
 {
     buffer.LoopBegin = begin * format.Samples.wSamplesPerBlock;
     buffer.LoopLength = end * format.Samples.wSamplesPerBlock;
@@ -274,7 +273,7 @@ void AUDIO::FadeIn(float fade_time)
 
 void AUDIO::FadeOut(float fade_time)
 {
-    FadeTo(0.0f, fade_time);
+    stateMachine->FadeOut(fade_time);
 }
 
 /*---------------------------------------------AUDIO DisableLoop()----------------------------------------------------*/
@@ -329,8 +328,14 @@ void AUDIO::SetBuffer(XAUDIO2_BUFFER buffer)
 /// </summary>
 void AUDIO::PerformDucking(float fade_vol)
 {
+    if (isDucking)
+        return;
+    volume_before_ducking = volume;
     isDucking = true;
-    FadeTo(fade_vol, 0.5f);
+    if (isPlaying)
+    {
+        FadeTo(fade_vol, 0.5f);
+    }
 }
 
 /*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
@@ -340,18 +345,13 @@ void AUDIO::PerformDucking(float fade_vol)
 /// </summary>
 void AUDIO::StopDucking()
 {
+    if (!isDucking)
+        return;
     isDucking = false;
+    if (isPlaying)
+        FadeTo(volume_before_ducking, 0.5f);
 }
 
-/*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
-/// <summary>
-/// <para> Sets the fade in volume for the stateMachine </para>
-/// <para> ¥Õ¥§©`¥É¥Ü¥Eå©`¥à¤òÔO¶¨¤¹¤E/para>
-/// </summary>
-void AUDIO::SetFadeInVolume(float fade_in)
-{
-    fade_in_volume = fade_in;
-}
 
 /*---------------------------------------------AUDIO Initialize()----------------------------------------------------*/
 
@@ -365,7 +365,7 @@ HRESULT AUDIO::Initialize()
     DWORD dwChunkSize, dwChunkPos;
     FindChunk(h, fourccRIFF, dwChunkSize, dwChunkPos);
     DWORD fileType;
-    ReadChunk(h, & fileType, sizeof(DWORD), dwChunkPos);
+    ReadChunk(h, &fileType, sizeof(DWORD), dwChunkPos);
     if (fileType != fourccWAVE)
         assert(!"Wrong Format");
     FindChunk(h, fourccFMT, dwChunkSize, dwChunkPos);

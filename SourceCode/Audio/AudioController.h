@@ -53,10 +53,17 @@ public:
     /// </summary>
     void Execute();
     /// <summary>
+    /// Renders the Debug UI
+    /// </summary>
+    void DebugUI();
+    /// <summary>
+    /// Call at the end of scene
+    /// </summary>
+    void Finalize();
+    /// <summary>
     /// Changes the current BGM to the next BGM
     /// </summary>
     void Exit();
-    void DebugUI();
     /// <summary>
     /// <para> Performs transition to the next audio </para>
     /// <para> 次のオーディオにトランジションする</para>

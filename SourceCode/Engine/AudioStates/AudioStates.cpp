@@ -2,6 +2,8 @@
 #include "AudioStates.h"
 #include "AudioStatePlay.h"
 #include "AudioStateFade.h"
+#include "AudioStateFadeIn.h"
+#include "AudioStateFadeOut.h"
 #include "AudioStatePause.h"
 using namespace AUDIO_STATES;
 
@@ -17,9 +19,11 @@ void AudioStateMachine::Initialize()
 {
     audioStates.emplace(AudioStateEnum::AudioStatePlay, std::make_shared<AudioStatePlay>());
     audioStates.emplace(AudioStateEnum::AudioStatePause, std::make_shared<AudioStatePause>());
-    audioStates.emplace(AudioStateEnum::AudioStateFade, std::make_shared<AudioStateFade>());
+    audioStates.emplace(AudioStateEnum::AudioStateFadeIn, std::make_shared<AudioStateFadeIn>());
+    audioStates.emplace(AudioStateEnum::AudioStateFadeOut, std::make_shared<AudioStateFadeOut>());
     current_state = {};
     Transition(AudioStateEnum::AudioStatePause);
+
 }
 
 /*----------------------------------------AudioStateMachine Transition()---------------------------------------------*/
@@ -29,9 +33,9 @@ void AudioStateMachine::Initialize()
 /// </summary>
 void AudioStateMachine::Transition(AudioStateEnum next_state)
 {
-    if (enum_state == next_state)
+    if (state_Enum == next_state)
         return;
-    enum_state = next_state;
+    state_Enum = next_state;
     if (current_state)
         current_state->Finalize(parent);
     current_state = audioStates.find(next_state)->second;
@@ -58,12 +62,26 @@ void AudioStateMachine::Execute()
 /// <param name="fade_vol"> : Fade volume target</param>
 void AudioStateMachine::FadeTo(float fade_time, float fade_vol)
 {
-    if (enum_state == AudioStateEnum::AudioStateFade)
+    if (state_Enum == AudioStateEnum::AudioStateFadeIn)
         return;
-    Transition(AudioStateEnum::AudioStateFade);
-    dynamic_cast<AudioStateFade*>(current_state.get())->SetTime(fade_time);
-    dynamic_cast<AudioStateFade*>(current_state.get())->SetVolume(fade_vol);
-    dynamic_cast<AudioStateFade*>(current_state.get())->CalculateRate(parent);
+    Transition(AudioStateEnum::AudioStateFadeIn);
+    dynamic_cast<AudioStateFadeIn*>(current_state.get())->SetTime(fade_time);
+    dynamic_cast<AudioStateFadeIn*>(current_state.get())->SetTargetVolume(fade_vol);
+    dynamic_cast<AudioStateFadeIn*>(current_state.get())->CalculateRate(parent);
+}
+
+/*----------------------------------------AudioStateMachine FadeOut()---------------------------------------------*/
+/// <summary>
+/// Perform fade out on the volume within the specified time
+/// </summary>
+/// <param name="fade_time"></param>
+void AudioStateMachine::FadeOut(float fade_time)
+{
+    if (state_Enum == AudioStateEnum::AudioStateFadeOut)
+        return;
+    Transition(AudioStateEnum::AudioStateFadeOut);
+    dynamic_cast<AudioStateFadeOut*>(current_state.get())->SetTime(fade_time);
+    dynamic_cast<AudioStateFadeOut*>(current_state.get())->CalculateRate(parent);
 }
 
 /*----------------------------------------AudioStateMachine CurrentState()---------------------------------------------*/
@@ -74,14 +92,14 @@ void AudioStateMachine::FadeTo(float fade_time, float fade_vol)
 /// <returns></returns>
 AudioStateEnum AudioStateMachine::CurrentState()
 {
-    return enum_state;
+    return state_Enum;
 }
 
 /*----------------------------------------AudioStateMachine DebugUI()---------------------------------------------*/
 void AudioStateMachine::DebugUI()
 {
     
-    switch (enum_state)
+    switch (state_Enum)
     {
     case AudioStateEnum::AudioStatePlay:
         ImGui::Text("AudioStatePlay");
@@ -89,8 +107,11 @@ void AudioStateMachine::DebugUI()
     case AudioStateEnum::AudioStatePause:
         ImGui::Text("AudioStatePause");
         break;    
-    case AudioStateEnum::AudioStateFade:
-        ImGui::Text("AudioStateFade");
+    case AudioStateEnum::AudioStateFadeIn:
+        ImGui::Text("AudioStateFadeIn");
+        break;
+    case AudioStateEnum::AudioStateFadeOut:
+        ImGui::Text("AudioStateFadeOut");
         break;
     }
 }

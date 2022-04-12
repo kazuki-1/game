@@ -125,7 +125,7 @@ void AudioController::DebugUI()
         ImGui::Checkbox("Play", &play);
         ImGui::Checkbox("Perform Ducking", &duck);
         if (duck)
-            PerformDucking(cur_BGM);
+            PerformDucking();
         else
             StopDucking();
 
@@ -146,6 +146,16 @@ void AudioController::DebugUI()
     }
 
 }
+
+/*---------------------------------------------------AUDIO STATE MACHINE Finalize()------------------------------------------------*/
+/// <summary>
+/// Call at the end of scene
+/// </summary>
+void AudioController::Finalize()
+{
+    audioMap.clear();
+}
+
 
 /*---------------------------------------------------AUDIO STATE MACHINE Exit()------------------------------------------------*/
 /// <summary>
@@ -192,7 +202,7 @@ void AudioController::Resume()
     if (transitioning || !pause)
         return;
     cur_BGM->FadeTo(1.0f, 1.0f);
-    cur_BGM->Play();
+    //cur_BGM->Play();
     pause = false;
 }
 
