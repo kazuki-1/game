@@ -3,58 +3,73 @@
 #include "Engine/Singleton.h"
 #include "Engine/DXMath.h"
 #include "OBJECT_DATA.h"
+//#include "COLLIDERS.h"
+//#include "Component.h"
+class Component;
 
-class COMPONENT;
-
-
-/*------------------------------------------GAMEOBJECT--------------------------------------------*/
-
-/// <summary>
-/// <para>GAMEOBJECT class. This one is for 3D objects. To Create 2D objects, create GAMEOBJECT_2D </para>
-/// <para>3Dゲームオブジェクト。２Dゲームオブジェクトの場合にはGAMEOBJECT_2Dを使用 </para>
-/// </summary>
-class GAMEOBJECT
+class GameObject
 {
 protected:
-    //  Data for loading file is stored here 
-    // ステージデータ読み込みデータを格納する
     std::shared_ptr<OBJECT_DATA>data;
-
-    // List of components
-    // コンポネントリスト
-    std::vector<std::shared_ptr<COMPONENT>>components;
+    std::vector<std::shared_ptr<Component>>components;
     char name_buffer[256] = "";
+    bool windowActive{};
 
     friend class OBJECT_DATA;
-
     void __InternalAddComponent(COMPONENT_TYPE t);
-    void __InternalAddComponent(COMPONENT_TYPE t, std::shared_ptr<COMPONENT_DATA>d);
+    void __InternalAddComponent(COMPONENT_TYPE t, std::shared_ptr<ComponentData>d);
 public:
-    GAMEOBJECT() {};
-    GAMEOBJECT(std::shared_ptr<OBJECT_DATA>d);
-    ~GAMEOBJECT() {}
+    GameObject() {};
     /// <summary>
-    /// <para> virtual function. Initializes the gameObject by creating components from the data member</para>
-    /// <para>　仮想関数。データを使ってゲームオブジェクトのコンポネントを生成
+    /// <para> Links the OBJECT_DATA to the gameObject </para>
+    /// <para> OBJECT_DATAとゲームオブジェクトをリンク </para>
+    /// </summary>
+    GameObject(std::shared_ptr<OBJECT_DATA>d);
+    ~GameObject() {}
+    /// <summary>
+    /// <para> Call after constructor </para>
+    /// <para> 生成後にこれを呼び出す</para>
     /// </summary>
     /// <returns></returns>
     virtual HRESULT Initialize();
     /// <summary>
-    /// <para> Virtual function. Performs the Execute() function in each component </para>
-    /// <para> 仮想関数。各コンポネントのExecute()関数を呼び出す
+    /// <para> Called every frame </para>
+    /// <para> 毎フレームに呼び出す </para>
     /// </summary>
     virtual void Execute();
     /// <summary>
-    /// <para> Virtual function. Calls the Render() function in each component </para>
-    /// <para> 仮想関数。各コンポネントのRender()関数を呼び出す。</para>
+    /// Called every frame
+    /// </summary>
+    virtual void ExecuteUI();
+    /// <summary>
+    /// <para> Called every frame to render all components </para>
+    /// <para> コンポネントを描画するように毎フレームに呼び出す </para>
     /// </summary>
     virtual void Render();
     /// <summary>
-    /// <para> Adds a component to the gameObject </para>
-    /// <para> ゲームオブジェクトにコンポネントを追加</para>
+    /// <para> Called every frame to render all component's UI </para>
+    /// <para> コンポネントのUIを描画するように毎フレームに呼び出す </para>
     /// </summary>
-    void AddComponent(COMPONENT_TYPE t);
+    virtual void RenderUI();
+    /// <summary>
+    /// <para> Reset static members, called when switching to another gameObject </para>
+    /// <para> Static変数をすべてリセットするこ。別のゲームオブジェクトを選択するときに呼び出す </para>
+    /// </summary>
+    void Reset();
+    /// <summary>
+    /// <para> Called to activate the gameObject window</para>
+    /// <para> ゲームオブジェクトウィンドウを起動するように呼び出す</para>
+    /// </summary>
+    void Activate();
+    /// <summary>
+    /// <para> Called to deactivate the gameObject window</para>
+    /// <para> ゲームオブジェクトウィンドウを閉じるように呼び出す</para>
+    /// </summary>
+    void Deactivate();
+    virtual void AddComponent(COMPONENT_TYPE t);
     void RemoveComponent(int id);
+
+    
     template <class T>
     T* GetComponent(int id = 0)
     {
@@ -69,57 +84,62 @@ public:
         }
         return nullptr;
     }
-    std::vector<std::shared_ptr<COMPONENT>>Components();
+    std::vector<std::shared_ptr<Component>>Components();
     std::shared_ptr<OBJECT_DATA>Data();
 };
 
-/*------------------------------------------GAMEOBJECT_MANAGER--------------------------------------------*/
-
-class GAMEOBJECT_MANAGER : public SINGLETON<GAMEOBJECT_MANAGER>
+class GameObjectManager : public Singleton<GameObjectManager>
 {
-    std::map<std::string, std::shared_ptr<GAMEOBJECT>>gameObjects;
+    std::map<std::string, std::shared_ptr<GameObject>>gameObjects;
 public:
     /// <summary>
-    /// <para> Initializes all the gameObjects in the map </para>
-    /// <para> マップ内すべてのゲームオブジェクトをリセットする </para>
+    /// <para> Create a new gameObject and insert it into the map </para>
+    /// <para> 新しいゲームオブジェクトを生成して、マップに登録する</para>
+    /// </summary>
+    /// <param name="n"> : Name of gameObject</param>
+    /// <param name="d"> : OBJECT_DATA class, will be linked to generated gameObject</param>
+    void Insert(std::string n, std::shared_ptr<OBJECT_DATA>d);
+    /// <summary>
+    /// <para> Create a new gameObject2D and insert it into the map </para>
+    /// <para> 新しいゲームオブジェクト2Dを生成して、マップに登録する</para>
+    /// </summary>
+    /// <param name="n"> : Name of gameObject</param>
+    /// <param name="d"> : OBJECT_DATA class, will be linked to generated gameObject</param>
+    void Insert2D(std::string n, std::shared_ptr<OBJECT_DATA>d);
+    void Remove(std::string name);
+    void Remove(std::shared_ptr<GameObject>gameObject);
+    void Clear();
+    std::shared_ptr<GameObject>Retrieve(std::string);
+    std::string RetrieveName(std::shared_ptr<GameObject>go);
+    std::map<std::string, std::shared_ptr<GameObject>>GetGameObjects();
+
+
+    /// <summary>
+    /// Called at the start of the stage. Initializes all gameObjects and their components
     /// </summary>
     void Initialize();
     /// <summary>
-    /// <para> Called every frame to perform Execute() of all gameObjects and its components </para>
-    /// <para> ゲームオブジェクト及びそのコンポネントのExecute()関数を呼び出すように毎フレームに呼び出す </para>
+    /// Performs Game functions. Called every frame to perform functions
     /// </summary>
     void Execute();
     /// <summary>
-    /// <para> Called every frame to perform Render() of all gameObjects and its components </para>
-    /// <para> ゲームオブジェクト及びそのコンポネントのRender()関数を呼び出すように毎フレームに呼び出す </para>
+    /// Performs UI functions. Called every frame to perform functions. 
+    /// </summary>
+    void ExecuteUI();
+    /// <summary>
+    /// Renders objects. Called every frame to perform rendering
     /// </summary>
     void Render();
     /// <summary>
-    /// <para> Generally unneeded. Called when closing to finalize all gameObjects</para>
-    /// <para> 基本的に必要ない。ゲームを終了時にゲームオブジェクトを終了処理するように呼び出す。</para>
+    /// Renders UI. Called every frame to perform rendering
+    /// </summary>
+    void RenderUI();
+    /// <summary>
+    /// Called at the end of program to finalize the manager
     /// </summary>
     void Finalize();
 
-
-
-    /// <summary>
-    /// <para> Create a gameObject and insert it into the map </para>
-    /// <para> ゲームオブジェクトを生成してマップに登録する </para>
-    /// </summary>
-    /// <param name="n"> : Name of gameObject</param>
-    /// <param name="d"> : Dataset of gameObject with data of components</param>
-    void Insert(std::string n, std::shared_ptr<OBJECT_DATA>d);
-    /// <summary>
-    /// <para> Remove the gameObject from the map, and from the game </para>
-    /// <para> ゲームオブジェクトをマップ及びゲームから削除する </para>
-    /// </summary>
-    /// <param name="name"> : name of gameObject to remove</param>
-    void Remove(std::string name);
-    void Remove(std::shared_ptr<GAMEOBJECT>gameObject);
-    void Clear();
-    std::shared_ptr<GAMEOBJECT>Retrieve(std::string);
-    std::string RetrieveName(std::shared_ptr<GAMEOBJECT>go);
-    std::map<std::string, std::shared_ptr<GAMEOBJECT>>GameObjects();
 };
 
 
+#define GAMEOBJECTS GameObjectManager::Instance()

@@ -10,9 +10,9 @@
 using namespace Math;
 static std::string input{ "" };
 static std::string output_file{ "" }, input_file{ "" };
-class DIRECTIONAL_LIGHT;
-class POINT_LIGHT;
-class SPOTLIGHT;
+class DirectionalLight_Component;
+class PointLight_Component;
+class SpotLight_Component;
 
 
 
@@ -24,24 +24,24 @@ class SPOTLIGHT;
 
 struct DLIGHT_DATA
 {
-	VECTOR4 direction{};
-	VECTOR4 colour{};
+	Vector4 direction{};
+	Vector4 colour{};
 
 };
 
 struct PLIGHT_DATA
 {
-	VECTOR4 position{};
-	VECTOR4 colour{};
+	Vector4 position{};
+	Vector4 colour{};
 	float range{};
-	VECTOR3 temp{};
+	Vector3 temp{};
 };
 
 struct SLIGHT_DATA
 {
-	VECTOR4 position{};
-	VECTOR4 direction{};
-	VECTOR4 colour{};
+	Vector4 position{};
+	Vector4 direction{};
+	Vector4 colour{};
 	float range{};
 	float inner{};
 	float outer{};
@@ -66,15 +66,15 @@ public:
 	};
 private:
 	L_TYPE type{L_TYPE::DIRECTIONAL};
-	 VECTOR3 direction{};
-	 VECTOR3 position{};
-	 VECTOR4 colour{};
+	 Vector3 direction{};
+	 Vector3 position{};
+	 Vector4 colour{};
 	 float range{};
 	 float inner{};
 	 float outer{};
 	//std::shared_ptr<LIGHT_DATA_BASE>data;
 
-	friend class LIGHTINGMANAGER;
+	friend class LightingManager;
 public:
 	LIGHTING() {}
 	LIGHTING(L_TYPE t);
@@ -103,13 +103,13 @@ public:
 		};
 
 	}
-	void WriteToData(DIRECTIONAL_LIGHT* d);
-	void WriteToData(POINT_LIGHT* p);
-	void WriteToData(SPOTLIGHT* s);
+	void WriteToData(DirectionalLight_Component* d);
+	void WriteToData(PointLight_Component* p);
+	void WriteToData(SpotLight_Component* s);
 	L_TYPE Type();
-	VECTOR3 Direction();
-	VECTOR3 Position();
-	VECTOR4 Colour();
+	Vector3 Direction();
+	Vector3 Position();
+	Vector4 Colour();
 	float Range();
 	float Inner();
 	float Outer();
@@ -119,9 +119,9 @@ public:
 
 	void RenderDebug();
 
-	void SetDirection(VECTOR3 dir);
-	void SetPosition(VECTOR3 pos);
-	void SetColour(VECTOR4 col);
+	void SetDirection(Vector3 dir);
+	void SetPosition(Vector3 pos);
+	void SetColour(Vector4 col);
 	void SetRange(float r);
 	void SetInnerCorner(float inner);
 	void SetOuterCorner(float outer);
@@ -135,7 +135,7 @@ public:
 };
 
 
-class LIGHTINGMANAGER : public SINGLETON<LIGHTINGMANAGER>
+class LightingManager : public Singleton<LightingManager>
 {
 	std::map<std::string, std::shared_ptr<LIGHTING>>dataset;
 public:

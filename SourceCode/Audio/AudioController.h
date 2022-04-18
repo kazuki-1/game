@@ -19,7 +19,7 @@ enum class AudioStates
 
 
 
-class AudioController : public SINGLETON<AudioController>
+class AudioController : public Singleton<AudioController>
 {
     std::map<AudioStates, std::shared_ptr<AUDIO>>audioMap;
     std::shared_ptr<AUDIO>cur_BGM;
@@ -37,16 +37,12 @@ public:
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
-    /// <para> Insert the audio and bind it to the state. The audio is retrieved from AUDIOENGINE, so perform AUDIOENGINE::Insert() before doing this </para>
+    /// <para> Insert the audio and bind it to the state. The audio is retrieved from AudioEngine, so perform AudioEngine::Insert() before doing this </para>
     /// <para> AUDIOENGINEƒ}ƒbƒv‚©‚çAUDIO‚ğŒŸõ‚µ‚ÄAstate‚ÉƒoƒCƒ“ƒh‚·‚é </para>
     /// </summary>
     /// <param name="state"> : The audio will be binded to this state</param>
-    /// <param name="name"> : Name of audio. Will be retrieved from AUDIOENGINE</param>
+    /// <param name="name"> : Name of audio. Will be retrieved from AudioEngine</param>
     void Insert(AudioStates state, std::string name);
-    /// <summary>
-    /// Plays the current BGM
-    /// </summary>
-    void Enter();
     /// <summary>
     /// <para> Called every frame. Performs fadeIn and fadeOut effects of current and next bgm</para>
     /// <para> ŠeAudio‚ÌƒtƒF[ƒhƒCƒ“‚ÆƒtƒF[ƒhƒAƒEƒgƒGƒtƒFƒNƒg‚ğˆ—‚·‚é‚æ‚¤‚É–ˆƒtƒŒ[ƒ€‚ÉŒÄ‚Ño‚·</para> 
@@ -60,6 +56,10 @@ public:
     /// Call at the end of scene
     /// </summary>
     void Finalize();
+    /// <summary>
+    /// Called when transitioning into this state
+    /// </summary>
+    void Enter();
     /// <summary>
     /// Changes the current BGM to the next BGM
     /// </summary>
@@ -82,18 +82,15 @@ public:
     void Resume();
     /// <summary>
     /// <para> Performs audio ducking. dock_target variable will be exempt </para>
-    /// <para> ¥ª©`¥Ç¥£¥ª¥À¥Ã¥­¥ó¥°¤òĞĞ¤¦¡£dock_target¤Ï³ıÍâ¤µ¤EE/para>
     /// </summary>
     /// <param name="dock_target"></param>
     void PerformDucking(std::shared_ptr<AUDIO>dock_target = {});
     /// <summary>
     /// <para> Stops audio ducking if is ducking. </para>
-    /// <para> ¥À¥Ã¥­¥ó¥°¤òÖ¹¤á¤E</para>
     /// </summary>
     void StopDucking();
     /// <summary>
     /// <para> Returns true if audio is in ducking state </para>
-    /// <para> ¥ª©`¥Ç¥£¥ª¤Ï¥À¥Ã¥­¥ó¥°¥¹¥Æ©`¥È¤Ç¤¢¤EĞTrue¤ò·µ¤¹</para>
     /// </summary>
     /// <returns></returns>
     bool IsDucking();

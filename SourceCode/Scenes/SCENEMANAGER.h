@@ -6,15 +6,25 @@
 #include <map>
 #include <string>
 
-
-class SCENEMANAGER : public SINGLETON<SCENEMANAGER>
+enum class ScenesEnum
 {
-    std::map<std::string, std::shared_ptr<SCENE>>scenes;
-    std::shared_ptr<SCENE> cur_Scene;
+    Scene_Game1, 
+    End
+};
+
+
+
+
+class SceneManager : public Singleton<SceneManager>
+{
+    std::map<ScenesEnum, std::shared_ptr<Scene>>scenes;
+    std::shared_ptr<Scene> cur_Scene;
+    ScenesEnum current_Enum;
 public:
     /// <summary>
     /// Initializes the scene manager by inserting neccessary scenes into the map
     /// </summary>
+    /// <param name="s"></param>
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
@@ -33,18 +43,35 @@ public:
     /// Changes the scenes to the one that is mapped to the name
     /// </summary>
     /// <param name="name"></param>
-    void ChangeScene(std::string name);
+    void ChangeScene(ScenesEnum name);
     /// <summary>
     /// Inserts an scene entity into the map
     /// </summary>
     /// <param name="name"></param>
     /// <param name="s"></param>
-    void Insert(std::string name, std::shared_ptr<SCENE>s);
+    void Insert(ScenesEnum name, std::shared_ptr<Scene>s);
+    /// <summary>
+    /// Transition into SceneDemo
+    /// </summary>
+    void Play();
+    /// <summary>
+    /// Pauses the demo scene
+    /// </summary>
+    void Pause();
+    /// <summary>
+    /// Stops the demo scene and transition back into SceneUI
+    /// </summary>
+    void Stop();
     /// <summary>
     /// Returns the scene mapped with the name
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    std::shared_ptr<SCENE>Retrieve(std::string name);
+    std::shared_ptr<Scene>Retrieve(ScenesEnum name);
+    /// <summary>
+    /// Returns the enum of this current scene
+    /// </summary>
+    /// <returns></returns>
+    ScenesEnum CurrentSceneEnum();
 
 };

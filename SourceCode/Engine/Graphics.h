@@ -2,25 +2,30 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-#include "DXMath.h"
+
 #include "LIGHTING.h"
-#include "Singleton.h"
+#define PLIGHT_MAX 8
+#define SLIGHT_MAX 8
 using namespace DirectX;
-using namespace Math;
-
-static const int PLIGHT_MAX = 8;
-static const int SLIGHT_MAX = 8;
 
 
 
-class Graphics : public SINGLETON<Graphics>
+
+
+class Graphics
 {
     Microsoft::WRL::ComPtr<ID3D11Buffer>dxSceneConstantBuffer;
     bool Render();
 public:
+    Graphics() {}
+    static Graphics* Instance()
+    {
+        static Graphics g;
+        return &g;
+    }
     struct SCENE_CONSTANT_DATA
     {
-        // View projection 
+        // View Projection
         XMFLOAT4X4 view_proj{};
         // Camera Position
         XMFLOAT4 camera_position{};
@@ -29,13 +34,12 @@ public:
         DLIGHT_DATA directional;
         PLIGHT_DATA pointlights[PLIGHT_MAX];
         SLIGHT_DATA spotlights[SLIGHT_MAX];
-        int pLightCount;
-        int sLightCount;
-        VECTOR2 temp;
+        int pLightCount{};
+        int sLightCount{};
+        Vector2 temp;
     };
     
     HRESULT Initialize(int Width, int Height, HWND hwnd);
     bool Frame();
     void Finalize();
-
 };

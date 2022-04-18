@@ -18,14 +18,14 @@
 #define fourccDPDS 'sdpd'
 #endif
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AUDIOENGINE Class-----------------------------------------------------------*/
+/*---------------------------------------------AudioEngine Class-----------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AUDIOENGINE Initialize()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Initialize()----------------------------------------------------*/
 /// <summary>
 /// Initializes the audioengine, initializing the IXAudio2 and IXAudio2MasteringVoice
 /// </summary>
 /// <returns></returns>
-HRESULT AUDIOENGINE::Initialize()
+HRESULT AudioEngine::Initialize()
 {
 
 
@@ -43,22 +43,22 @@ HRESULT AUDIOENGINE::Initialize()
 
 }
 
-/*---------------------------------------------AUDIOENGINE Execute()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
 /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
 /// </summary>
-void AUDIOENGINE::Execute()
+void AudioEngine::Execute()
 {
     for (auto& a : audios)
         a.second->Execute();
 }
 
-/*---------------------------------------------AUDIOENGINE Finalize()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Finalize()----------------------------------------------------*/
 /// <summary>
 /// Finalizes the class, generally not needed
 /// </summary>
-void AUDIOENGINE::Finalize()
+void AudioEngine::Finalize()
 {
     for (auto& a : audios)
         a.second->Finalize();
@@ -66,14 +66,14 @@ void AUDIOENGINE::Finalize()
     //delete MasteringVoice;
 }
 
-/*---------------------------------------------AUDIOENGINE Insert()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Insert()----------------------------------------------------*/
 /// <summary>
 /// <para> Create an AUDIO object and insert it into the map </para>
 /// <para> AUDIOを生成し、マップに登録</para>
 /// </summary>
 /// <param name="name"> : Name of audio file</param>
 /// <param name="file_path"> : File path of audio file</param>
-void AUDIOENGINE::Insert(std::string name, std::wstring file_path)
+void AudioEngine::Insert(std::string name, std::wstring file_path)
 {
     // Check if instance exists in map
     for (auto& a : audios)
@@ -89,23 +89,23 @@ void AUDIOENGINE::Insert(std::string name, std::wstring file_path)
     audios.find(name)->second->Initialize();
 }
 
-/*---------------------------------------------AUDIOENGINE MasteringVoice()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine MasteringVoice()----------------------------------------------------*/
 
-IXAudio2MasteringVoice* AUDIOENGINE::MasteringVoice()
+IXAudio2MasteringVoice* AudioEngine::MasteringVoice()
 {
     return masteringVoice;
 }
 
-/*---------------------------------------------AUDIOENGINE XAudio()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine XAudio()----------------------------------------------------*/
 
-ComPtr<IXAudio2>AUDIOENGINE::XAudio()
+ComPtr<IXAudio2>AudioEngine::XAudio()
 {
     return xAudio;
 }
 
-/*---------------------------------------------AUDIOENGINE Retrieve()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Retrieve()----------------------------------------------------*/
 
-std::shared_ptr<AUDIO>AUDIOENGINE::Retrieve(std::string name)
+std::shared_ptr<AUDIO>AudioEngine::Retrieve(std::string name)
 {
     for (auto& a : audios)
     {
@@ -115,9 +115,9 @@ std::shared_ptr<AUDIO>AUDIOENGINE::Retrieve(std::string name)
     return audios.find("Empty")->second;
 }
 
-/*---------------------------------------------AUDIOENGINE Audios()----------------------------------------------------*/
+/*---------------------------------------------AudioEngine Audios()----------------------------------------------------*/
 
-std::map<std::string, std::shared_ptr<AUDIO>>AUDIOENGINE::Audios()
+std::map<std::string, std::shared_ptr<AUDIO>>AudioEngine::Audios()
 {
     return audios;
 }
@@ -209,13 +209,31 @@ void AUDIO::Play()
 
 }
 
+/*---------------------------------------------AUDIO FadeInAndPlay()----------------------------------------------------*/
+
+void AUDIO::FadeInAndPlay(float fade_time)
+{
+    Play();
+    FadeIn(fade_time);
+}
+
+/*---------------------------------------------AUDIO FadeOutAndPause()----------------------------------------------------*/
+
+void AUDIO::FadeOutAndPause(float fade_time)
+{
+    FadeOut(1.0f);
+    if (volume <= 0.0f)
+        Stop();
+}
+
 /*---------------------------------------------AUDIO Stop()----------------------------------------------------*/
 
 void AUDIO::Stop()
 {
     if (!isPlaying)
         return;
-    stateMachine->FadeOut(1.0f);
+    //stateMachine->FadeOut(1.0f);
+    sourceVoice->Stop();
 
     //sourceVoice->Stop();
     //sourceVoice->DestroyVoice();
@@ -363,7 +381,7 @@ HRESULT AUDIO::Initialize()
     buf.AudioBytes = dwChunkSize;
     buf.pAudioData = buffer;
     buf.Flags = XAUDIO2_END_OF_STREAM;
-    HRESULT hr = AUDIOENGINE::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format);
+    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format);
     assert(hr == S_OK);
     this->buffer = buf;
     //delete[] buffer;
@@ -416,6 +434,13 @@ bool AUDIO::IsPlaying()
 bool AUDIO::IsDucking()
 {
     return isDucking;
+}
+
+/*---------------------------------------------AUDIO IsDucking()----------------------------------------------------*/
+
+std::shared_ptr<AUDIO_STATES::AudioStateMachine>AUDIO::GetStateMachine()
+{
+    return stateMachine;
 }
 
 /*---------------------------------------------AUDIO FilePath()----------------------------------------------------*/

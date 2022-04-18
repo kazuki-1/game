@@ -8,10 +8,10 @@ using namespace Math;
 
 using namespace DirectX;
 //using namespace Math;
-class MESH;
-class COMPONENT_DATA;
-class OBB_COLLIDER_DATA;
-class CAPSULE_COLLIDER_DATA;
+class Mesh_Component;
+class ComponentData;
+class OBBCollider_Data;
+class CapsuleCollider_Data;
 
 namespace COLLIDERS
 {
@@ -24,8 +24,8 @@ namespace COLLIDERS
     struct RAYCASTDATA
     {
         std::string model_name{};
-        VECTOR3 position{ 0, 0, 0 };
-        VECTOR3 normal{ 0, 0, 0 };
+        Vector3 position{ 0, 0, 0 };
+        Vector3 normal{ 0, 0, 0 };
         float distance;
         int m_Index{ -1 };
     };
@@ -42,8 +42,8 @@ namespace COLLIDERS
     {
     protected:
         bool isActive{ true };
-        VECTOR3 offset;
-        VECTOR3 rotation;
+        Vector3 offset;
+        Vector3 rotation;
         XMMATRIX world;
         XMMATRIX bone_World{ XMMatrixIdentity() };
     public:
@@ -77,7 +77,7 @@ namespace COLLIDERS
         /// <para> 純粋仮想関数。引数にある座標と当たり判定を計算</para>
         /// </summary>
         /// <returns></returns>
-        virtual bool Collide(VECTOR3 p) { return false; }
+        virtual bool Collide(Vector3 p) { return false; }
         /// <summary>
         /// <para> virtual Function. Called to fit the collider to the bone of the model</para>
         /// <para> 仮想関数。モデルにしてされたボーンにコライダーをセット</para>
@@ -85,13 +85,13 @@ namespace COLLIDERS
         /// <param name="name"> : Name of bone</param>
         /// <param name="m"> : Pointer of model</param>
         virtual void FitToBone(std::string name, MODEL* m);
-        virtual void SetData(COMPONENT_DATA* data) {}
+        virtual void SetData(ComponentData* data) {}
         /// <summary>
         /// Offsets the collider 
         /// </summary>
         /// <param name="off"> : User declared offset</param>
-        virtual void OffsetCollider(VECTOR3 off) { offset = off; }
-        virtual void RotateCollider(VECTOR3 rot) { rotation = rot; }
+        virtual void OffsetCollider(Vector3 off) { offset = off; }
+        virtual void RotateCollider(Vector3 rot) { rotation = rot; }
 
         /// <summary>
         /// Activates the collider
@@ -111,17 +111,17 @@ namespace COLLIDERS
         /// </summary>
         /// <returns></returns>
         template <class T>
-        T* CastData(COMPONENT_DATA* d)
+        T* CastData(ComponentData* d)
         {
             T* t = dynamic_cast<T*>(d);
             return t;
-                
+
         }
         /// <summary>
         /// Returns the offset of the collider in Vector3 Form
         /// </summary>
         /// <returns></returns>
-        VECTOR3 Offset() { return offset; }
+        Vector3 Offset() { return offset; }
         /// <summary>
         /// Generates a XMMATRIX from the offset vector
         /// </summary>
@@ -154,22 +154,22 @@ namespace COLLIDERS
     /// </summary>
     class SPHERE : public COLLIDER_BASE
     {
-        VECTOR3 center;
+        Vector3 center;
         float radius;
         std::shared_ptr<MODEL>cube;
     public:
-        SPHERE(VECTOR3 pos, float rad);
+        SPHERE(Vector3 pos, float rad);
         void Execute(XMMATRIX mat) override;
         void Render() override;
         bool Collide(COLLIDER_BASE* other) override;
-        bool Collide(VECTOR3 p) override;
-        VECTOR3 Center();
+        bool Collide(Vector3 p) override;
+        Vector3 Center();
         float Radius();
         float Size() override { return radius; }
 
-        void SetCenter(VECTOR3 v);
+        void SetCenter(Vector3 v);
         void SetRadius(float rad);
-        void SetData(COMPONENT_DATA* data) override;
+        void SetData(ComponentData* data) override;
 
     };
 
@@ -178,9 +178,9 @@ namespace COLLIDERS
 
     class OBB : public BOUNDING_BOX
     {
-        std::vector<VECTOR3>points;
-        VECTOR3 oriMin, oriMax;
-        VECTOR3 rotation;
+        std::vector<Vector3>points;
+        Vector3 oriMin, oriMax;
+        Vector3 rotation;
 
         /// <summary>
         /// Update the coordinates of each of the points
@@ -191,29 +191,29 @@ namespace COLLIDERS
 
         // Main Functions
         OBB();
-        OBB(VECTOR3 vMin, VECTOR3 vMax);
+        OBB(Vector3 vMin, Vector3 vMax);
         /// <summary>
         /// Initializes the collider. Call after creating 
         /// </summary>
         /// <returns></returns>
         HRESULT Initialize() override;
-        void Update(VECTOR3 pos, VECTOR3 rot);
+        void Update(Vector3 pos, Vector3 rot);
         void Execute(XMMATRIX mat) override;
         void Render() override;
         bool Collide(COLLIDER_BASE* other) override;
-        bool Collide(VECTOR3 p) override;
+        bool Collide(Vector3 p) override;
 
         // Sub Functions
 
-        void SetMin(VECTOR3 min);
-        void SetMax(VECTOR3 max);
-        void SetData(COMPONENT_DATA* d)override;
+        void SetMin(Vector3 min);
+        void SetMax(Vector3 max);
+        void SetData(ComponentData* d)override;
 
-        std::vector<VECTOR3>Points();
-        VECTOR3 Rotation();
-        VECTOR3 Center();
+        std::vector<Vector3>Points();
+        Vector3 Rotation();
+        Vector3 Center();
         float Size() override;
-    
+
 
         bool Status();
     };
@@ -223,21 +223,21 @@ namespace COLLIDERS
 
     class CYLINDER : public COLLIDER_BASE
     {
-        VECTOR3 top, bottom;
-        VECTOR3 center;
+        Vector3 top, bottom;
+        Vector3 center;
         float height;
         float radius;
     public:
         CYLINDER();
-        CYLINDER(VECTOR3 tp, VECTOR3 bot, float rad);
+        CYLINDER(Vector3 tp, Vector3 bot, float rad);
         HRESULT Initialize() override;
         void Execute(XMMATRIX mat) override;
         void Render() override;
         bool Collide(COLLIDER_BASE* other) override;
-        void SetData(VECTOR3 tp, VECTOR3 bot, float rad);
+        void SetData(Vector3 tp, Vector3 bot, float rad);
 
-        VECTOR3 Top();
-        VECTOR3 Bottom();
+        Vector3 Top();
+        Vector3 Bottom();
         float Height();
         float Radius();
     };
@@ -247,40 +247,40 @@ namespace COLLIDERS
 
     class CAPSULE : public COLLIDER_BASE
     {
-        VECTOR3 center;
+        Vector3 center;
         float radius{};
         float height;
     public:
-        VECTOR3 Top();
-        VECTOR3 Bottom();
+        Vector3 Top();
+        Vector3 Bottom();
         CAPSULE();
         CAPSULE(float rad);
-        CAPSULE(VECTOR3 cent, float rad, float ht);
+        CAPSULE(Vector3 cent, float rad, float ht);
         HRESULT Initialize() override;
         void Execute(XMMATRIX mat) override;
         void Render() override;
         bool Collide(COLLIDER_BASE* other) override;
-        bool Collide(VECTOR3 p) override;
+        bool Collide(Vector3 p) override;
 
-        VECTOR3 Center();
+        Vector3 Center();
         float Radius();
         float Size() override;
         void OffsetCenter(XMMATRIX world);
-        void SetCenter(VECTOR3 c);
+        void SetCenter(Vector3 c);
         void SetRadius(float r);
         void SetHeight(float h);
-        void SetData(COMPONENT_DATA* d) override;
+        void SetData(ComponentData* d) override;
     };
 
 #pragma endregion
 #pragma region RAYCAST_MANAGER
 
     /// <summary>
-    /// MESH_COLLIDER models are inserted here.
+    /// MeshCollider_Component models are inserted here.
     /// </summary>
-    class RAYCAST_MANAGER : public SINGLETON<RAYCAST_MANAGER>
+    class RAYCAST_MANAGER : public Singleton<RAYCAST_MANAGER>
     {
-        std::vector<MESH*>meshes;
+        std::vector<Mesh_Component*>meshes;
     public:
         /// <summary>
         /// <para> Inserts the model into the map and allow it to perform collision check </para>
@@ -288,7 +288,11 @@ namespace COLLIDERS
         /// </summary>
         /// <param name="name"> : Name of model</param>
         /// <param name="m"> : Model pointer</param>
-        void Insert(MESH* m);
+        void Insert(Mesh_Component* m);
+        /// <summary>
+        /// Called at the end of the program or when switching scenes
+        /// </summary>
+        void Finalize();
         /// <summary>
         /// <para> Perform ray casting collision check </para>
         /// <para> レイーキャストを利用して当たり判定を計算 </para>
@@ -298,8 +302,8 @@ namespace COLLIDERS
         /// <param name="cur_mesh"> : Pointer of current mesh component. Collision check will not be performed onto this mesh</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        bool Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd);
-        bool Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
+        bool Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RAYCASTDATA& rcd);
+        bool Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
         /// <summary>
         /// <para> Performs ray cast on all models in the vector and returns a list of collided model and collision data </para>
         /// <para> モデルリストのすべてのモデルをレイーキャスト当たり判定を計算し、あたったモデルのリストを返す </para>
@@ -309,8 +313,8 @@ namespace COLLIDERS
         /// <param name="direction_vector"> : Direction of movement</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        void GetListOfCollided(MESH* cur_Mesh, VECTOR3 startOfRay, VECTOR3 directionVector, std::vector<RAYCASTDATA>& rcd);
-        std::vector<MESH*>Meshes();
+        void GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd);
+        std::vector<Mesh_Component*>Meshes();
 
 
     };
@@ -323,7 +327,7 @@ namespace COLLIDERS
     /// <param name="top"> : Starting point of vector</param>
     /// <param name="bot"> : Ending point of vector</param>
     /// <returns></returns>
-    VECTOR3 PointLineClosest(VECTOR3 top, VECTOR3 bot, VECTOR3 target);
+    Vector3 PointLineClosest(Vector3 top, Vector3 bot, Vector3 target);
     /// <summary>
     /// <para> Calculates a point on a line that is closest to the target point </para>
     /// <para> 目標点に一番近い点を計算 </para>
@@ -331,7 +335,7 @@ namespace COLLIDERS
     /// <param name="top"> : Starting point of vector</param>
     /// <param name="bot"> : Ending point of vector</param>
     /// <returns></returns>
-    VECTOR3 PointLineClosest(VECTOR3 origin, CAPSULE* target);
+    Vector3 PointLineClosest(Vector3 origin, CAPSULE* target);
     /// <summary>
     /// <para> Performs axis casting, where each point is casted onto the axis, and is compared </para>
     /// <para> 各点を軸にキャストして比較される </para>
@@ -342,7 +346,7 @@ namespace COLLIDERS
     /// <param name="tarMax"> ： Maximum point of second collider</param>
     /// <param name="rotation"> : Rotation of first collider</param>
     /// <param name="colCount"> : Output. Shows how many time it is a hit</param>
-    void AxisCasting(VECTOR3 oriMin, VECTOR3 oriMax, VECTOR3 tarMin, VECTOR3 tarMax, VECTOR3 rotation, int* colCount);
+    void AxisCasting(Vector3 oriMin, Vector3 oriMax, Vector3 tarMin, Vector3 tarMax, Vector3 rotation, int* colCount);
     /// <summary>
     /// <para> Performs collision check between 2 OBBs </para>
     /// <para> 2つのOBBに当たり判定を計算 </para>
@@ -358,6 +362,6 @@ namespace COLLIDERS
     /// <param name="m"> : Target model</param>
     /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
     /// <returns></returns>
-    bool RayCast(VECTOR3& s, VECTOR3& e, MODEL* m,  RAYCASTDATA& hr, int mesh_index = -1);
-    
+    bool RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index = -1);
+
 }

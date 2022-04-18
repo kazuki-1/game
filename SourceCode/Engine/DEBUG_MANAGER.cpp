@@ -1,15 +1,15 @@
 #include "DEBUG_MANAGER.h"
-#include "../Components/Base Classes/COMPONENT.h"
-#include "../Components/Headers/TRANSFORM_3D.h"
+#include "../Components/Base Classes/Component.h"
+#include "../Components/Transform3D.h"
 #include "../GAMEOBJECT_2D.h"
 #include "IMGUI.h"
 #include "Input.h"
 #include "Camera.h"
 bool scaling{}, moving{ true }, rotating{};
 bool start;
-VECTOR2 clicked_pos, movement;
+Vector2 clicked_pos, movement;
 
-HRESULT DEBUG_MANAGER::Initialize()
+HRESULT DebugController::Initialize()
 {
     arrows = std::make_shared<DEBUG_ARROWS>();
     scalars = std::make_shared<DEBUG_SCALARS>();
@@ -20,13 +20,13 @@ HRESULT DEBUG_MANAGER::Initialize()
     return S_OK;
 
 }
-void DEBUG_MANAGER::Execute()
+void DebugController::Execute()
 {
     if (!hasTarget)
         return;
-    if (dynamic_cast<GAMEOBJECT_2D*>(target))
+    if (dynamic_cast<GameObject_2D*>(target))
         return;
-    TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
+    Transform3D_Component* target = this->target->GetComponent<Transform3D_Component>();
     arrows->SetTarget(target->Translation(), target->Rotation());
     scalars->SetTarget(target->Translation(), target->Rotation());
     discs->SetTarget(target->Translation(), target->Rotation());
@@ -68,7 +68,7 @@ void DEBUG_MANAGER::Execute()
     }
 
 }
-void DEBUG_MANAGER::Render()
+void DebugController::Render()
 {
     if (!hasTarget)
         return;
@@ -80,73 +80,73 @@ void DEBUG_MANAGER::Render()
         arrows->Render();
 
 }
-void DEBUG_MANAGER::SetTarget(GAMEOBJECT* g)
+void DebugController::SetTarget(GameObject* g)
 {
     target = g;
     hasTarget = true;
 }
-void DEBUG_MANAGER::ClearTarget()
+void DebugController::ClearTarget()
 {
     target = {};
     hasTarget = false;
 }
-void DEBUG_MANAGER::MouseControl()
+void DebugController::MouseControl()
 {
-    //VECTOR2 pos;
-    //INPUTMANAGER::MOUSE* m{ INPUTMANAGER::Instance()->Mouse().get() };
-    //if (m->LButton().Triggered())
-    //{
-    //    clicked_pos += m->fPosition();
-    //    start = true;
-    //}
-    //if (m->LButton().Held() && start)
-    //{
-    //    pos = m->fPosition();
-    //    VECTOR2 v{ pos - clicked_pos };
-    //    v *= 0.1f;
-    //    clicked_pos = pos;
-    //}
-    //if (m->LButton().Released())
-    //{
-    //    clicked_pos = {};
-    //    start = false;
-    //}
+    Vector2 pos;
+    INPUTMANAGER::MOUSE* m{ INPUTMANAGER::Instance()->Mouse().get() };
+    if (m->LButton().Triggered())
+    {
+        clicked_pos += m->fPosition();
+        start = true;
+    }
+    if (m->LButton().Held() && start)
+    {
+        pos = m->fPosition();
+        Vector2 v{ pos - clicked_pos };
+        v *= 0.1f;
+        clicked_pos = pos;
+    }
+    if (m->LButton().Released())
+    {
+        clicked_pos = {};
+        start = false;
+    }
 
-    //VECTOR3 m_pos;
-    //VECTOR4 start, end;
-    //m_pos.x = m->fPosition().x;
-    //m_pos.y = m->fPosition().y;
-    //m_pos.z = 0.0f;
-    //D3D11_VIEWPORT vp;
-    //UINT num{ 1 };
-    //DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
+    Vector3 m_pos;
+    Vector4 start, end;
+    m_pos.x = m->fPosition().x;
+    m_pos.y = m->fPosition().y;
+    m_pos.z = 0.0f;
+    D3D11_VIEWPORT vp;
+    UINT num{ 1 };
+    DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
 }
 
 bool x{}, y{}, z{};
 
 
-void DEBUG_MANAGER::TranslateArrows()
+void DebugController::TranslateArrows()
 {
     INPUTMANAGER* in{ INPUTMANAGER::Instance() };
-    VECTOR2 movement{};
+    Vector2 movement{};
     D3D11_VIEWPORT vp;
     UINT num{ 1 };
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
  
-    if (dynamic_cast<GAMEOBJECT_2D*>(target))
+    if (dynamic_cast<GameObject_2D*>(target))
         return;
-    TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
+    Transform3D_Component* target = this->target->GetComponent<Transform3D_Component>();
 
 
-    VECTOR3 horizontol, vertical, forward;
+    Vector3 horizontol, vertical, forward;
     horizontol.Load(target->TransformMatrix().r[0]);
     vertical.Load(target->TransformMatrix().r[1]);
     forward.Load(target->TransformMatrix().r[2]);
 
-    static VECTOR2 clicked_pos{};
+    static Vector2 clicked_pos{};
     static bool start;
-    VECTOR2 pos;
-    VECTOR2 v;
+    Vector2 pos;
+    Vector2 v;
 
     if (in->Mouse()->LButton().Triggered())
     {

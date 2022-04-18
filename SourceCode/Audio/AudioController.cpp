@@ -2,7 +2,7 @@
 //#include "AUDIOSTATE_BASE.h"
 #include "../Engine/Audio.h"
 #include "../Engine/IMGUI.h"
-#define AUDIOS AUDIOENGINE::Instance()->Audios()
+#define AUDIOS AudioEngine::Instance()->Audios()
 #define TRANSITION_TIME 1.0f
 #define TRANSITION_THRESHOLD 0.2f
 
@@ -23,22 +23,13 @@ int index{};
 /// <returns></returns>
 HRESULT AudioController::Initialize()
 {
-    audioMap.clear();
-    audioMap.insert(std::make_pair(AudioStates::State_Idle, AUDIOENGINE::Instance()->Retrieve("Idle")));
-    audioMap.insert(std::make_pair(AudioStates::State_Tension, AUDIOENGINE::Instance()->Retrieve("Tension")));
-    audioMap.insert(std::make_pair(AudioStates::State_Climax, AUDIOENGINE::Instance()->Retrieve("Climax")));
-    audioMap.insert(std::make_pair(AudioStates::State_Cooldown, AUDIOENGINE::Instance()->Retrieve("Cooldown")));
+    audioMap.insert(std::make_pair(AudioStates::State_Idle, AudioEngine::Instance()->Retrieve("Idle")));
+    audioMap.insert(std::make_pair(AudioStates::State_Tension, AudioEngine::Instance()->Retrieve("Tension")));
+    audioMap.insert(std::make_pair(AudioStates::State_Climax, AudioEngine::Instance()->Retrieve("Climax")));
+    audioMap.insert(std::make_pair(AudioStates::State_Cooldown, AudioEngine::Instance()->Retrieve("Cooldown")));
     cur_BGM = audioMap.find(AudioStates::State_Idle)->second;
     Enter();
     return S_OK;
-}
-
-/*---------------------------------------------------AUDIO STATE MACHINE Enter()------------------------------------------------*/
-
-void AudioController::Enter()
-{
-    cur_BGM->FadeIn(1.0f);
-    //cur_BGM->Play();
 }
 
 /*---------------------------------------------------AUDIO STATE MACHINE Execute()------------------------------------------------*/
@@ -48,7 +39,7 @@ void AudioController::Enter()
 /// </summary>
 void AudioController::Execute()
 {
-    AUDIOENGINE::Instance()->Execute();
+    AudioEngine::Instance()->Execute();
     if (isDucking)
     {
         for (auto& audio : AUDIOS)
@@ -125,10 +116,6 @@ void AudioController::DebugUI()
         }
         ImGui::Checkbox("Play", &play);
         ImGui::Checkbox("Perform Ducking", &duck);
-        if (ImGui::Button("Stop"))
-        {
-            cur_BGM->Stop();
-        }
         if (duck)
             PerformDucking();
         else
@@ -158,13 +145,17 @@ void AudioController::DebugUI()
 /// </summary>
 void AudioController::Finalize()
 {
-    for (auto& a : audioMap)
-    {
-        if (a.second->Volume() > 0.01f)
-            a.second->FadeOut(1.0f);
-    }
+    audioMap.clear();
 }
 
+/*---------------------------------------------------AUDIO STATE MACHINE Enter()------------------------------------------------*/
+
+void AudioController::Enter()
+{
+    //cur_BGM->Play();
+    cur_BGM->GetStateMachine()->Initialize();
+    cur_BGM->FadeIn(1.0f);
+}
 
 /*---------------------------------------------------AUDIO STATE MACHINE Exit()------------------------------------------------*/
 /// <summary>
@@ -185,6 +176,7 @@ void AudioController::Exit()
 void AudioController::Transition(AudioStates next_state)
 {
     next_BGM = audioMap.find(next_state)->second;
+    
     transitioning = true;
 }
 
@@ -218,7 +210,6 @@ void AudioController::Resume()
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Performs audio ducking. dock_target variable will be exempt </para>
-/// <para> •™©`•«•£•™•¿•√•≠•Û•∞§Ú––§¶°£dock_target§œ≥˝Õ‚§µ§ÅEÅE/para>
 /// </summary>
 /// <param name="dock_target"></param>
 void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
@@ -233,7 +224,6 @@ void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Stops audio ducking if is ducking. </para>
-/// <para> •¿•√•≠•Û•∞§Ú÷π§·§ÅE</para>
 /// </summary>
 void AudioController::StopDucking()
 {
@@ -246,7 +236,6 @@ void AudioController::StopDucking()
 /*---------------------------------------------------AUDIO STATE MACHINE IsDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Returns true if audio is in ducking state </para>
-/// <para> •™©`•«•£•™§œ•¿•√•≠•Û•∞•π•∆©`•»§«§¢§ÅE–True§Ú∑µ§π</para>
 /// </summary>
 /// <returns></returns>
 bool AudioController::IsDucking()

@@ -5,6 +5,13 @@
 #include <filesystem>
 #include "SHADERS.h"
 #include "BlendMode.h"
+std::wstring texture_names[] = { L"Default_Diffuse", L"Default_Normal", L"Default_Diffuse" , L"Default_Diffuse" };
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------MODEL_RESOURCES Class---------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------MODEL_RESOURCES Constructor---------------------------------------------------------------*/
+
 MODEL_RESOURCES::MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool Triangulate)
 {
 
@@ -18,10 +25,11 @@ MODEL_RESOURCES::MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool 
     cereal::BinaryInputArchive in(ifs);
     in(Scenes, Axises, Meshes, Materials, Animations);
     CreateBuffers(dv, model_path.c_str());
-    //InsertShader(L"OutlineShader.fx");
     InsertShader(L"PhongShader.fx");
 
 }
+
+/*-------------------------------------------MODEL_RESOURCES CreateBuffers()---------------------------------------------------------------*/
 
 void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
 {
@@ -36,14 +44,6 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
         if (FAILED(hr))
             assert(!"Failed to create Vertex Buffer");
 
-        //a.ibd.ByteWidth = a.Indices.size() * sizeof(int);
-        //a.ibd.Usage = D3D11_USAGE_DEFAULT;
-        //a.ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-        //a.id.pSysMem = a.Indices.data();
-        //hr = dv->CreateBuffer(&a.ibd, &a.id, a.dxIndexBuffer.GetAddressOf());
-        //if (FAILED(hr))
-        //    assert(!"Failed to create Index Buffer");
-        //a.index_Count = a.Indices.size();
 
         for (int a = 0; a < m.Subsets.size(); ) {
             if (m.Subsets[a].indices.size() <= 0) {
@@ -70,14 +70,18 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
     bool hasTexture{};
     for (auto m = Materials.begin(); m != Materials.end(); ++m)
     {
-        for (auto m2 = Materials.begin(); m2 != Materials.end(); ++m2)
-        {
-            if (m2->second.texture_path[0] != "")
-            {
-                hasTexture = true;
-                break;
-            }
-        }
+
+        // Search for material
+        //for (auto m2 = Materials.begin(); m2 != Materials.end(); ++m2)
+        //{
+        //    if (m2->second.texture_path[0] != "")
+        //    {
+        //        hasTexture = true;
+        //        break;
+        //    }
+        //}
+
+        // Set material path
         const char* back{ "/" };
         std::filesystem::path bs{ back };
         std::filesystem::path path(model_path);
@@ -89,6 +93,7 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
         path += directory;
         std::string form{ path.string() };
 
+        // Begin setting texture from path
         for (int ind = 0; ind < 4; ++ind)
         {
             if (m->second.texture_path[ind] != "")
@@ -101,10 +106,10 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
 
                 path = format += filename.filename();
                 //m->second.Textures[ind].reset(new TEXTURE(path, dv));
-                m->second.Textures[ind] = TEXTURE_MANAGER::Instance()->Retrieve(path.wstring());
+                m->second.Textures[ind] = TextureManager::Instance()->Retrieve(path.wstring());
             }
             else
-                m->second.Textures[ind] = TEXTURE_MANAGER::Instance()->Retrieve(L"");
+                m->second.Textures[ind] = TextureManager::Instance()->Retrieve(texture_names[ind]);
         }
 
 
@@ -129,6 +134,9 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
 
 }
 
+/*-------------------------------------------MODEL_RESOURCES BlendAnimation()---------------------------------------------------------------*/
+
+
 void MODEL_RESOURCES::BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYFRAME* end, float factor, ANIMATION::KEYFRAME* output)
 {
     size_t n_Count{ start->Nodes.size() };
@@ -148,25 +156,27 @@ void MODEL_RESOURCES::BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYF
 
 }
 
+/*-------------------------------------------MODEL_RESOURCES Render()---------------------------------------------------------------*/
 
 void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf)
 {
     OUTLINE_CONSTANT_BUFFER outlineData{};
     outlineData.outline_colour = { 1.0f, 1.0f, 1.0f, 1.0f };
-    outlineData.outline_size = 0.03f;
+    outlineData.outline_size = 0.01f;
     dc->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("3D")->Rasterizer().Get());
-
     for (auto& s : shaders)
     {
+        if (s.first == L"OutlineShader.fx")
+            continue;
         for (auto& m : Meshes)
         {
-            dc->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("3D")->Rasterizer().Get());
+                dc->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("3D")->Rasterizer().Get());
             dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            dc->OMSetBlendState(BLENDMODE::Instance()->Get().Get(), 0, 0xFFFFFFFF);
-            s->SetShaders(dc);
+            dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xFFFFFFFF);
+            s.second->SetShaders(dc);
             // Updating Object Constant buffers (World and colour)
             MESH_CONSTANT_BUFFER data{};
-            const ANIMATION::KEYFRAME::NODE& n{ kf->Nodes.at(0) };
+            //const ANIMATION::KEYFRAME::NODE& n{ kf->Nodes.at(0) };
             //XMMATRIX f_World{ XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world) };
             XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
             data.colour = colour;               // Incase model has no subsets
@@ -197,7 +207,6 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
 
             for (const auto& s : m.Subsets)
             {
-
                 UINT stride{ sizeof(VERTEX) }, offset{ 0 };
                 dc->IASetIndexBuffer(s.subsetIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
                 dc->IASetVertexBuffers(0, 1, m.dxVertexBuffer.GetAddressOf(), &stride, &offset);

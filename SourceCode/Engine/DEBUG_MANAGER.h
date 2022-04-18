@@ -5,16 +5,16 @@
 #include <d3d11.h>
 using namespace Math;
 
-class GAMEOBJECT;
-class TRANSFORM_3D;
+class GameObject;
+class Transform3D_Component;
 /// <summary>
 /// Use this to call out the translation arrow, rotation circles and the scaling scalars
 /// </summary>
-class DEBUG_MANAGER : public SINGLETON<DEBUG_MANAGER>
+class DebugController : public Singleton<DebugController>
 {
     //XMMATRIX target;
-    //TRANSFORM_3D* target;
-    GAMEOBJECT* target;
+    //Transform3D_Component* target;
+    GameObject* target;
     bool hasTarget;
     std::shared_ptr<DEBUG_ARROWS>arrows;
     std::shared_ptr<DEBUG_DISCS>discs;
@@ -26,8 +26,8 @@ public:
     HRESULT Initialize();
     void Execute();
     void Render();
-    //void SetTarget(TRANSFORM_3D* t);
-    void SetTarget(GAMEOBJECT* g);
+    //void SetTarget(Transform3D_Component* t);
+    void SetTarget(GameObject* g);
     void ClearTarget();
     void MouseControl();
     bool HasTarget() { return hasTarget; }

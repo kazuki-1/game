@@ -8,22 +8,22 @@ using namespace DirectX;
 void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
 {
     
-    eye = Default_Eye_Position;
+    Eye = Default_Eye_Position;
     target = Target;
     XMVECTOR UP{ 0.0f, 1.0f, 0.0f, 0.0f };
-    viewMatrix = XMMatrixLookAtLH(eye.XMV(), target.XMV(), UP);
+    viewMatrix = XMMatrixLookAtLH(Eye.XMV(), target.XMV(), UP);
 
     s = std::make_shared<DEBUG_SPHERE>();
     
 
 
 }
-VECTOR2 clicked_pos{}, move_pos{};
-VECTOR2 movement;
-
 void Camera::Execute()
 {
     
+    //VECTOR2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisY() };
+    //rotation.x += XMConvertToRadians(ax.y);
+    //rotation.y += XMConvertToRadians(ax.x);
     INPUTMANAGER* i = INPUTMANAGER::Instance();
     INPUTMANAGER::MOUSE* m = INPUTMANAGER::Instance()->Mouse().get();
     float wheel{};
@@ -31,23 +31,25 @@ void Camera::Execute()
         wheel = 5.0f;
     if (m->Wheel().Down().Held())
         wheel = -5.0f;
-    VECTOR2 pos, pos2, drag_pos;
+    static Vector2 clicked_pos{}, move_pos{};
+    static Vector2 movement;
+    Vector2 pos, pos2, drag_pos;
     static bool start{};
     if (i->AltKeys()->State().Held())
     {
         if (m->LButton().Triggered()) {
             clicked_pos += m->fPosition();
             start = true;
-        }
+        }       
         if (m->LButton().Held() && start)
         {
             pos = m->fPosition();
-            VECTOR2 vector{ pos - clicked_pos };
+            Vector2 vector{ pos - clicked_pos };
             vector *= 0.1f;
             rotation.y += ToRadians(vector.x);
             rotation.x += -ToRadians(vector.y);
             clicked_pos = pos;
-        }
+        }              
         if (m->LButton().Released()) {
             clicked_pos = {};
             start = false;
@@ -73,14 +75,14 @@ void Camera::Execute()
     }
 
     XMMATRIX temp{ XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
-    VECTOR3 horizontol, vertical, forward;
+    Vector3 horizontol, vertical, forward;
     horizontol.Load(temp.r[0]);
     vertical.Load(temp.r[1]);
     horizontol.Normalize();
     vertical.Normalize();
-    forward = eye - target;
+    forward = Eye - target;
     forward.Normalize();
-    target += horizontol * movement.x + vertical * movement.y;
+    target += horizontol * movement.x + vertical * movement.y ;
     //rotation.x = Math::Clamp(rotation.x, ToRadians(-89), ToRadians(89));
     range += -forward.Length() * wheel * 0.5f;
 
@@ -90,10 +92,11 @@ void Camera::Execute()
     XMFLOAT3 f;
     XMStoreFloat3(&f, F);
 
-    eye.x = target.x + (f.x * -range);
-    eye.y = target.y + (f.y * range);
-    eye.z = target.z + (f.z * -range);
-
+    //XMFLOAT3 e;
+    Eye.x = target.x + (f.x * -range);
+    Eye.y = target.y + (f.y * range);
+    Eye.z = target.z + (f.z * -range);
+    
     SetLookAt();
     s->SetPosition(target);
     s->Execute();
@@ -114,37 +117,22 @@ void Camera::Execute()
 
 void Camera::Render()
 {
-    ImGui::Begin("Position");
-    ImGui::InputFloat3("Eye", &eye.x);
-    ImGui::InputFloat2("Movement", &movement.x);
-    ImGui::InputFloat2("clicked", &clicked_pos.x);
-
-    ImGui::InputFloat3("Target", &target.x);
-    ImGui::End();
-    s->Render();
+    //ImGui::Begin("Position");
+    //ImGui::InputFloat3("Eye", &Eye.x);
+    //ImGui::InputFloat3("Target", &target.x);
+    //ImGui::End();
+    //s->Render();
 }
 
 void Camera::ResetCamera()
 {
     target = {};
-    eye = {};
+    Eye = {};
     rotation = {};
 }
 
-void Camera::ResetToTarget(VECTOR3 t)
+void Camera::ResetToTarget(Vector3 t)
 {
     next_target = t;
     reset = true;
-}
-
-VECTOR3 Camera::Forward()
-{
-    XMMATRIX rot = XMMatrixRotationRollPitchYawFromVector(rotation.XMV());
-    VECTOR3 forward;
-    forward.Load(rot.r[2]);
-    return forward;
-}
-VECTOR3 Camera::Eye()
-{
-    return eye;
 }

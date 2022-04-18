@@ -11,7 +11,7 @@
 #include "DirectX11.h"
 using namespace DirectX;
 
-class IMGUI : public SINGLETON<IMGUI>
+class IMGUI : public Singleton<IMGUI>
 {
     ImGuiContext* imContext;
     ImGui::FileBrowser fileBrowser;
@@ -74,7 +74,7 @@ public:
     // Creates a popup based on error_string. Perform status(bool) check outside and put the pointer of it here
     void CreatePopup(std::string error_string, bool* status)
     {
-        if (!*status)
+        if (!*status )
             return;
         ImGui::OpenPopup("Error");
 

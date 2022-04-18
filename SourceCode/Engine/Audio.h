@@ -11,9 +11,9 @@
 using namespace Microsoft::WRL;
 class AUDIO;
 /// <summary>
-/// Use this to create an AUDIO object by calling AUDIOENGINE::Instance()->Insert(std::string name, std::wstring file_path)
+/// Use this to create an AUDIO object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
 /// </summary>
-class AUDIOENGINE : public SINGLETON<AUDIOENGINE>
+class AudioEngine : public Singleton<AudioEngine>
 {
 
     ComPtr<IXAudio2>xAudio;
@@ -67,14 +67,20 @@ protected:
 
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
-public:
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>stateMachine;
+public:
 
     float volume{ 1.0f };
     float fade_in_volume{};
     AUDIO() {};
     AUDIO(std::wstring path);
     virtual void Play();
+    /// <summary>
+    /// <para> Call this to perform fade in and play the file </para>
+    /// </summary>
+    /// <param name="fade_time"></param>
+    void FadeInAndPlay(float fade_time);
+    void FadeOutAndPause(float fade_time);
     void Stop();
     void Finalize();
     /// <summary>
@@ -141,6 +147,7 @@ public:
     IXAudio2SourceVoice* SourceVoice();
     bool IsPlaying();
     bool IsDucking();
+    std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
 };
 
 

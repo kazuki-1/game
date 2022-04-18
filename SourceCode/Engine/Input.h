@@ -11,7 +11,7 @@ class MODEL;
 
 
 
-class INPUTMANAGER : public SINGLETON<INPUTMANAGER>
+class INPUTMANAGER : public Singleton<INPUTMANAGER>
 {
 public:
 	class KEYBOARD;
@@ -38,12 +38,12 @@ public:
 	class KEYBOARD
 	{
 		KEYSTATE Keys[256]{};
-		VECTOR2 axisX{}, axisY{};
+		Vector2 axisX{}, axisY{};
 
 	public:
 		KEYBOARD() {};
-		void ResetPressedState();
-		void ResetReleasedState();
+		//void ResetPressedState();
+		//void ResetReleasedState();
 		void Execute();
 
 		void KeyDown(unsigned int k);
@@ -54,8 +54,8 @@ public:
 		bool Triggered(unsigned int k);
 
 		KEYSTATE KeyState(unsigned int k);
-		VECTOR2 AxisX();
-		VECTOR2 AxisY();
+		Vector2 AxisX();
+		Vector2 AxisY();
 
 	};
 	class MOUSE
@@ -101,7 +101,7 @@ public:
 		KEYSTATE* pMButton() { return &mButton; }
 
 		MOUSE_WHEEL Wheel();
-		VECTOR2 fPosition();
+		Vector2 fPosition();
 		void SetPosition(int x, int y);
 	};
 	class ALTKEY
@@ -126,7 +126,7 @@ public:
 	void Initialize();
 	void Execute();
 	void ResetState();
-	void DragMousePosition(VECTOR2* v, KEYSTATE* k);
+	void DragMousePosition(Vector2* v, KEYSTATE* k);
 	bool MouseRayCast(MODEL* m, D3D11_VIEWPORT vp);
 
 	std::shared_ptr<KEYBOARD> Keyboard();
@@ -135,7 +135,7 @@ public:
 };
 
 
-namespace IN_BOOL
+namespace KEYS
 {
 	enum MBS
 	{
@@ -161,6 +161,21 @@ namespace IN_BOOL
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Held();
 
 		}
+		return false;
+	}
+	inline bool Triggered(MBS mb)
+	{
+		switch (mb)
+		{
+		case LB:
+			return INPUTMANAGER::Instance()->Mouse()->LButton().Triggered();
+		case RB:
+			return INPUTMANAGER::Instance()->Mouse()->RButton().Triggered();
+		case MB:
+			return INPUTMANAGER::Instance()->Mouse()->MButton().Triggered();
+
+		}
+		return false;
 	}
 	inline bool Released(MBS mb)
 	{
@@ -174,6 +189,9 @@ namespace IN_BOOL
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Released();
 
 		}
+		return false;
 	}
 
 }
+
+

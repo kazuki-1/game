@@ -11,7 +11,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
 {
     HRESULT hr{ S_OK };
     vSync = VSYNC;
-    UINT numModes{}, numerator{}, denominator{};
+    UINT numModes, numerator, denominator;
     hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)dxFactory.GetAddressOf());
     assert(hr == S_OK);
 
@@ -49,7 +49,8 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     GPUMemory = (int)(dad.DedicatedVideoMemory / 1024 / 1024);
 
     std::wstring name;
-    name = dad.Description;
+    name = std::to_wstring((wchar_t)dad.Description);
+
 
     UINT deviceFlags{ 0 };
 #ifdef _DEBUG
@@ -149,8 +150,14 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     drd.SlopeScaledDepthBias = 0.0f;
 
     RASTERIZERMANAGER::Instance()->Add("3D", dxDevice.Get(), drd);
+
+
     drd.CullMode = D3D11_CULL_NONE;
     RASTERIZERMANAGER::Instance()->Add("2D", dxDevice.Get(), drd);
+
+    drd.FillMode = D3D11_FILL_WIREFRAME;
+    RASTERIZERMANAGER::Instance()->Add("Wireframe", dxDevice.Get(), drd);
+    
     // hr = dxDevice->CreateRasterizerState(&drd, dxRasterizerState.GetAddressOf());
     // if (FAILED(hr))
     //     assert(!"Rasterizer state creation failed!");

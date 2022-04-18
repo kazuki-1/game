@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <assert.h>
+#include "DirectX11.h"
 using namespace Microsoft::WRL;
 class TEXTURE
 {
@@ -23,8 +24,7 @@ public:
     {
         HRESULT hr = DirectX::CreateWICTextureFromFile(dv, tex_path.c_str(), TextureResource.GetAddressOf(), SRV.GetAddressOf());
         if (FAILED(hr))
-            assert(!"Couldn't find texture");
-        
+            GenerateEmptyTexture(dv, 0xFFFFFFFF, 16);
     }
     TEXTURE(ID3D11Device* dv)
     {
@@ -33,6 +33,11 @@ public:
             assert(!"Failed to create Empty Texture");
 
 
+    }
+    TEXTURE(UINT colour_code)
+    {
+        HRESULT hr{ GenerateEmptyTexture(DirectX11::Instance()->Device(), colour_code, 16) };
+        assert(hr == S_OK);
     }
     HRESULT Load(const wchar_t* tex_path, ID3D11Device* dv)
     {
@@ -65,7 +70,7 @@ public:
         d2d.SampleDesc = { 1, 0 };
         d2d.BindFlags = D3D11_BIND_SHADER_RESOURCE;
         d2d.Width = d2d.Height = dimensions;
-        size_t texels{ dimensions * dimensions };
+        size_t texels{ (unsigned long long)(dimensions * dimensions )};
         std::unique_ptr<DWORD[]>sysMem{ std::make_unique<DWORD[]>(texels) };
         for (size_t alpha = 0; alpha < texels; ++alpha)
             sysMem[alpha] = rgb_value;
